@@ -1,0 +1,20 @@
+.timer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+#timer{
+    margin-left: 25%;
+}
+.container{
+    background-color: gray;
+}
+nav.navbar.navbar-expand-lg.navbar-light.bg-light{
+    background-color: rgb(80, 80, 80)!important;
+}
+.card{
+    text-align: center;
+    min-height: 300;
+    margin-top: 10px;
+
+}

@@ -1,0 +1,34 @@
+EXERCICIOS
+
+5 – O código abaixo possui um caractere como entrada, e ele confere se este caractere é uma vogal seja em minúscula ou maiúscula.
+6-Codigo corrigido:
+boolean isConsoante(String s, int n){
+    boolean resp= true;
+    if (n != s.length()){
+    if (s.charAt(n)<'0' || s.charAt(n)>'9'){
+    if (isVogal(s.charAt(n)) == true){
+    resp= false;
+    } else {
+    resp=isConsoante(s, n + 1);
+    }
+    } else {
+    resp=false;
+    }
+    }
+    return resp;
+    }
+7-Codigo corrigido:
+boolean isConsoante(String s, int i){
+    boolean resp= true;
+    if (i < s.length()){
+    resp = true;
+    } else if (isConsoante(s.charAt(i)) == false){
+    resp = false;
+    }
+    return resp;
+    }
+8- A segunda versão do código é mais fácil de entender.
+9-Bastante complicado de entender seu funcionamento devido a diversas funções que não é possível saber sua saída.
+10-No primeiro caso o i será diminuído depois do retorno da função, já no segundo caso o i será diminuído antes do retorno, que será i -1.
+11-O programa abaixo irá mostrar o limite de cada tipo sendo que byte é 127 short é 32.767,int é 2.147.483.647 e por fim, long é 9.223.372.036.854.775.807
+12- Pois os operadores << e >> movimentam os bits da variável. Nesse caso , 10111(23 em binário) quando passado por << se tranforma em 46(101110) e quando passado por >> se tranforma em 11(01011)

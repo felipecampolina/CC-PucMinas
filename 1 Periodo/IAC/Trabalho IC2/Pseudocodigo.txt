@@ -1,0 +1,23 @@
+Inclua biblioteca stdio.h
+Inclua biblioteca stdlib.h
+
+funcao main()
+    INICIO
+    
+    VARIAVEIS REAIS
+    raio, pi, área
+
+    Entrada de dados
+    Escreva raio
+    Leia raio
+
+    Calculo (Processamento)
+    área = raio * raio * pi
+
+
+    Saída de dados 
+    Escreve o valor de área
+
+    retorna 0
+
+    FIM

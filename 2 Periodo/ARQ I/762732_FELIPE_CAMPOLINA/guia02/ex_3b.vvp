@@ -1,0 +1,44 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1110-g18392a46)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\system.vpi";
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\va_math.vpi";
+S_000001eece742720 .scope module, "Guia_0203" "Guia_0203" 2 1;
+ .timescale 0 0;
+v000001eece8a95c0_0 .var "b", 7 0;
+v000001eece770a40_0 .var/real "x", 0 0;
+S_000001eece7428b0 .scope begin, "main" "main" 2 7, 2 7 0, S_000001eece742720;
+ .timescale 0 0;
+    .scope S_000001eece742720;
+T_0 ;
+    %pushi/real 1342177280, 4065; load=0.625000
+    %store/real v000001eece770a40_0;
+    %pushi/vec4 160, 0, 8;
+    %store/vec4 v000001eece8a95c0_0, 0, 8;
+    %end;
+    .thread T_0;
+    .scope S_000001eece742720;
+T_1 ;
+    %fork t_1, S_000001eece7428b0;
+    %jmp t_0;
+    .scope S_000001eece7428b0;
+t_1 ;
+    %vpi_call 2 8 "$display", "Guia_0203 - Tests" {0 0 0};
+    %vpi_call 2 9 "$display", "x = %f", v000001eece770a40_0 {0 0 0};
+    %vpi_call 2 10 "$display", "b = 0.%8b", v000001eece8a95c0_0 {0 0 0};
+    %vpi_call 2 11 "$display", "b = 0.%x%x (16)", &PV<v000001eece8a95c0_0, 4, 4>, &PV<v000001eece8a95c0_0, 0, 4> {0 0 0};
+    %vpi_call 2 12 "$display", "b = 0.%o%o (8) ", &PV<v000001eece8a95c0_0, 5, 3>, &PV<v000001eece8a95c0_0, 2, 3> {0 0 0};
+    %end;
+    .scope S_000001eece742720;
+t_0 %join;
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "ex_3b.v";

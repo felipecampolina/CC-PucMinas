@@ -1,0 +1,79 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1110-g18392a46)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\system.vpi";
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\Users\felip\Desktop\programas\Icarus_Verilog_v11b2\lib\ivl\va_math.vpi";
+S_0000026c80cb5430 .scope module, "test_f7" "test_f7" 2 31;
+ .timescale 0 0;
+v0000026c80c92a90_0 .var "s", 0 0;
+o0000026c80cc7188 .functor BUFZ 1, C4<z>; HiZ drive
+v0000026c80c92b30_0 .net "w", 0 0, o0000026c80cc7188;  0 drivers
+o0000026c80cc71b8 .functor BUFZ 1, C4<z>; HiZ drive
+v0000026c80cc42d0_0 .net "w1", 0 0, o0000026c80cc71b8;  0 drivers
+v0000026c80cc4370_0 .var "x", 0 0;
+v0000026c80cc4410_0 .var "y", 0 0;
+v0000026c80cc44b0_0 .net "z", 0 0, L_0000026c80cb6df0;  1 drivers
+v0000026c80d143f0_0 .net "z1", 0 0, L_0000026c80cc4a00;  1 drivers
+S_0000026c80e2bb50 .scope module, "MUX1" "mux" 2 43, 2 16 0, S_0000026c80cb5430;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 1 "s";
+    .port_info 1 /OUTPUT 1 "s1";
+    .port_info 2 /INPUT 1 "a";
+    .port_info 3 /INPUT 1 "select";
+L_0000026c80e2bce0 .functor NOT 1, v0000026c80c92a90_0, C4<0>, C4<0>, C4<0>;
+L_0000026c80cb6df0 .functor AND 1, v0000026c80cc4370_0, L_0000026c80e2bce0, C4<1>, C4<1>;
+L_0000026c80cc4a00 .functor AND 1, v0000026c80cc4370_0, v0000026c80c92a90_0, C4<1>, C4<1>;
+v0000026c80c92dd0_0 .net "a", 0 0, v0000026c80cc4370_0;  1 drivers
+v0000026c80c92ff0_0 .net "not_select", 0 0, L_0000026c80e2bce0;  1 drivers
+v0000026c80cc6b70_0 .net "s", 0 0, L_0000026c80cb6df0;  alias, 1 drivers
+v0000026c80cb6b20_0 .net "s1", 0 0, L_0000026c80cc4a00;  alias, 1 drivers
+v0000026c80cb6bc0_0 .net "select", 0 0, v0000026c80c92a90_0;  1 drivers
+S_0000026c80cb6c60 .scope begin, "main" "main" 2 47, 2 47 0, S_0000026c80cb5430;
+ .timescale 0 0;
+S_0000026c80c92720 .scope module, "modulo" "f7" 2 42, 2 9 0, S_0000026c80cb5430;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 1 "s";
+    .port_info 1 /OUTPUT 1 "s2";
+    .port_info 2 /INPUT 1 "e";
+v0000026c80c928b0_0 .net "e", 0 0, v0000026c80cc4370_0;  alias, 1 drivers
+v0000026c80c92950_0 .net "s", 0 0, o0000026c80cc7188;  alias, 0 drivers
+v0000026c80c929f0_0 .net "s2", 0 0, o0000026c80cc71b8;  alias, 0 drivers
+    .scope S_0000026c80cb5430;
+T_0 ;
+    %fork t_1, S_0000026c80cb6c60;
+    %jmp t_0;
+    .scope S_0000026c80cb6c60;
+t_1 ;
+    %vpi_call 2 48 "$display", "Exemplo_0701 - Felipe Campolina - 762732" {0 0 0};
+    %vpi_call 2 49 "$display", "z, z1 = saidas" {0 0 0};
+    %vpi_call 2 50 "$display", "x = entrada" {0 0 0};
+    %vpi_call 2 51 "$display", "s = vari\303\241vel de sele\303\247\303\243o" {0 0 0};
+    %vpi_call 2 52 "$display", "   x    s    z    z1" {0 0 0};
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0000026c80cc4370_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0000026c80cc4410_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0000026c80c92a90_0, 0, 1;
+    %delay 1, 0;
+    %vpi_call 2 57 "$monitor", "%4b %4b %4b %4b", v0000026c80cc4370_0, v0000026c80c92a90_0, v0000026c80cc44b0_0, v0000026c80d143f0_0 {0 0 0};
+    %delay 1, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0000026c80cc4370_0, 0, 1;
+    %delay 1, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0000026c80c92a90_0, 0, 1;
+    %end;
+    .scope S_0000026c80cb5430;
+t_0 %join;
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "Exemplo_0701.v";

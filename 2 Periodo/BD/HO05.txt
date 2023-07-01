@@ -1,0 +1,51 @@
+1-
+A = (actors) ⨝ actors.first_name=directors.first_name ∧ actors.last_name=directors.last_name (directors)
+
+
+π actors.first_name,actors.last_name (A)
+
+2- 
+A = (actors) ▷ actors.first_name=directors.first_name ∧ actors.last_name=directors.last_name (directors)
+
+
+π actors.first_name,actors.last_name (A)
+3-
+D0 = ρid ← directors.id, first_name ← directors.first_name, last_name ← directors.last_name (directors)
+
+
+D1 = πfirst_name, last_name (D0)
+
+A0 = ρid ← actors.id, first_name ← actors.first_name, last_name ← actors.last_name (actors)
+
+
+A1 = πfirst_name, last_name (A0)
+
+
+U = A1 ∪ D1
+
+π first_name, last_name (U)
+
+4- 
+FD0 = (movies) ⨝ movies.id=movies_directors.movie_id  (movies_directors) ⨝ movies_directors.director_id=directors.id (directors)
+
+
+FD1 = π movies.id, movies.name, movies.year, movies.rank (FD0)
+
+
+S = movies - FD1
+
+
+π name (S)
+
+5- FA = (movies) ⨝ movies.id=roles.movie_id (roles) ⨝ actor_id=actors.id (actors)
+FAC = γ actors.id,actors.first_name,actors.last_name;count(movie_id)→q_filmes(FA)
+FAC2 = σ q_filmes >=2(FAC)
+S = FAC - FAC2
+π first_name,last_name (S)
+6- 
+FA = (movies) ⨝ movies.id=roles.movie_id (roles) ⨝ roles.actor_id=actors.id (actors)
+
+
+FC = γ movies.id;count(roles.actor_id) -> q_atores (FA)
+
+FC2 = σ q_atores < 2 (FC)

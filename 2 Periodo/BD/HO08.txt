@@ -1,0 +1,44 @@
+1
+
+SELECT A.first_name,B.last_name
+FROM actors AS A INNER JOIN directors AS B ON A.first_name=B.first_name
+
+2
+SELECT A.first_name,B.last_name
+FROM actors AS A FULL OUTER JOIN directors AS B ON A.first_name=B.first_name
+3
+
+(SELECT first_name as NOME,last_name as SOBRENOME FROM actors) UNION (SELECT first_name,last_name FROM directors)
+
+4
+SELECT A.name 
+FROM movies AS A JOIN movies_directors AS B ON A.id=B.movie_id
+WHERE director_id IS NULL
+
+
+5
+SELECT first_name, last_name
+FROM (
+		SELECT identificador
+		FROM (
+				SELECT actor_id as identificador, COUNT(movie_id) as a
+				FROM roles
+				GROUP BY actor_id
+			) AS table_2
+		WHERE a < 2
+	) AS table_1 NATURAL JOIN actors
+WHERE id=identificador
+
+6
+SELECT genre,year,a
+        FROM (
+        SELECT genre,movie_id, a
+        FROM (
+                    SELECT movie_id as idfilme, COUNT(actor_id) as a
+                    FROM roles
+                    GROUP BY movie_id
+                ) as mov NATURAL JOIN movies_genres
+        WHERE a < 2
+        AND idfilme=movie_id
+    ) AS table_2 NATURAL JOIN movies
+WHERE movie_id=id

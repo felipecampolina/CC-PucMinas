@@ -1,0 +1,1 @@
+// As vezes quando transformado para celular ou ipad, o cabeçalho some, basta diminuir o zoom da página.

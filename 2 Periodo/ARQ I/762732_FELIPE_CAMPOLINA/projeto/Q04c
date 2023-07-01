@@ -1,0 +1,24 @@
+;Felipe Campolina
+;Q04 c - 762732
+
+Start:	load data0
+	and data0
+	not data0
+	add data2
+	write
+	load data1
+	not data1
+	add data2
+	write
+	load data1
+	not data1
+	add data2
+	load data1
+	not data1
+	add data2
+	write
+	stop
+	
+data0: 	.data 2 0	;start with 1
+data1:	.data 2 1	;start with 1
+data2:	.data 2 2	;start with 2

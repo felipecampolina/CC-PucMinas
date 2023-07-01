@@ -1,0 +1,16 @@
+@Article{OemerAydin2022,
+  author   = {Ömer Aydın, Enis Karaarslan},
+  journal  = {www.ssrn.com},
+  title    = {{OpenAI ChatGPT Generated Literature Review: Digital Twin in Healthcare}},
+  year     = {2022},
+  month    = jul,
+  abstract = {O artigo "OpenAI ChatGPT Generated Literature Review: Digital Twin in Healthcare" é uma revisão da literatura gerada pelo modelo de linguagem natural GPT-3 da OpenAI, que explora o conceito de "Digital Twin" no setor de saúde.
+
+A revisão da literatura começa com uma definição do termo "Digital Twin" e sua origem na indústria de manufatura. Em seguida, a revisão explora como esse conceito está sendo aplicado ao setor de saúde, incluindo exemplos de casos de uso em diferentes áreas, como assistência médica personalizada, monitoramento remoto de pacientes, simulação de procedimentos cirúrgicos e previsão de resultados de tratamento.
+
+O artigo também discute os desafios e limitações do uso de "Digital Twins" na saúde, incluindo a coleta e integração de dados de várias fontes, a necessidade de modelagem precisa do corpo humano e a necessidade de garantir a segurança e privacidade dos dados dos pacientes.
+
+Por fim, o artigo conclui que o uso de "Digital Twins" na saúde tem o potencial de revolucionar a forma como a assistência médica é prestada e melhorar os resultados para os pacientes. No entanto, ainda há muitas questões a serem resolvidas antes que essa tecnologia possa ser amplamente adotada.},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}

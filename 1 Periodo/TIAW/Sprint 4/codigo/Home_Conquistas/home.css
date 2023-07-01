@@ -1,0 +1,41 @@
+.timer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+#timer{
+    margin-left: 25%;
+}
+.container{
+    background-color: gray;
+}
+nav.navbar.navbar-expand-lg.navbar-light.bg-light{
+    background-color: rgb(80, 80, 80)!important;
+}
+.card{
+    text-align: center;
+    min-height: 18rem;
+    margin-top: 10px;
+
+}
+span{
+    color: white;
+}
+a.navbar-brand{
+    margin-left: 20px!important;
+}
+body{
+    background-color: rgb(71, 70, 70)!important;
+}
+footer{
+    color: white;
+    text-align: center;
+}
+#footer{
+    padding: 0 0 0 0!important;
+    background-color: rgb(41, 39, 40);
+    height: 8.5rem!important;
+}
+main{
+    margin-bottom: 8rem!important;
+}

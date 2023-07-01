@@ -1,0 +1,15 @@
+div#area_resultado {
+    background-color: black;
+    color: white;
+}
+div#area_calculadora {
+    background-color: brown;
+}
+h1{
+    text-align: right;
+}
+.row {
+    margin-right: 0;
+    margin-left: 0;
+    
+}

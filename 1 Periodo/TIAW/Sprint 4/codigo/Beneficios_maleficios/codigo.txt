@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Benefícios e Malefícios</title>
+</head>
+<body>
+    <div class="geral">
+        <div class="maleficios">
+            <h1>Maleficios</h1>
+            <li>
+                <ul>1-Vicio em nicotina </ul>
+                <ul>2-Perda de folego</ul>
+                <ul>3-Insuficiencia pulmonar</ul>
+                <ul>4-Câncer</ul>
+                <ul>5-Imprevisibilidade perante a falta de estudos a fundo sobre o assunto</ul>
+            </li>
+        </div>
+        <div class="beneficios">
+            <h1>Beneficios</h1>
+            <li>
+                <ul>1-Funciona como ponte para fumantes de cigarros convencionais tentarem acabar com o vicio</ul>
+                <ul>2-Causar menos imcomodo aos proximos por causa do odor ser melhor que a fumaça dos cigarros</ul>
+                <ul>3-O Vape é mais barato que o cigarro a longo prazo</ul>
+                <ul>4-É possivel controar a ingestão de nicotina</ul>
+                <ul>5-É 95% menos prejuidicial que o fumo</ul>
+            </li>
+        </div>
+
+    </div>
+</body>
+</html>

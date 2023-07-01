@@ -1,0 +1,36 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+img {
+  padding: 5px;
+}
+
+body{
+  background-color: rgb(71, 70, 70)!important;
+}
+h6{
+  color:white;
+}
+label{
+  color: white;
+}
+h1{
+  color: white;
+}
+p{
+  color: white;
+}
+footer{
+  color: white;
+  text-align: center;
+}
+#footer{
+  padding: 0 0 0 0!important;
+  background-color: rgb(41, 39, 40);
+  height: 6.5rem!important;
+}
+main{
+  margin-bottom: 5rem!important;
+}

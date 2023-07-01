@@ -1,0 +1,111 @@
+@Article{OemerAydin2022,
+  author   = {Ömer Aydın, Enis Karaarslan},
+  journal  = {www.ssrn.com},
+  title    = {{OpenAI ChatGPT Generated Literature Review: Digital Twin in Healthcare}},
+  year     = {2022},
+  month    = {#jul},
+  abstract = {O artigo "OpenAI ChatGPT Generated Literature Review: Digital Twin in Healthcare" é uma revisão da literatura gerada pelo modelo de linguagem natural GPT-3 da OpenAI, que explora o conceito de "Digital Twin" no setor de saúde.
+
+A revisão da literatura começa com uma definição do termo "Digital Twin" e sua origem na indústria de manufatura. Em seguida, a revisão explora como esse conceito está sendo aplicado ao setor de saúde, incluindo exemplos de casos de uso em diferentes áreas, como assistência médica personalizada, monitoramento remoto de pacientes, simulação de procedimentos cirúrgicos e previsão de resultados de tratamento.
+
+O artigo também discute os desafios e limitações do uso de "Digital Twins" na saúde, incluindo a coleta e integração de dados de várias fontes, a necessidade de modelagem precisa do corpo humano e a necessidade de garantir a segurança e privacidade dos dados dos pacientes.
+
+Por fim, o artigo conclui que o uso de "Digital Twins" na saúde tem o potencial de revolucionar a forma como a assistência médica é prestada e melhorar os resultados para os pacientes. No entanto, ainda há muitas questões a serem resolvidas antes que essa tecnologia possa ser amplamente adotada.},
+  doi      = {10.2139/ssrn.4308687},
+  keywords = {OpenAI, ChatGPT, gêmeo digital, saúde, revolução ChatGPT, publicação acadêmica, inteligência artificial},
+}
+
+@Article{Biswas2023,
+  author   = {Som Biswas},
+  journal  = {https://pubs.rsna.org/},
+  title    = {{ChatGPT and the Future of Medical Writing}},
+  year     = {2023},
+  abstract = {O artigo "ChatGPT and the Future of Medical Writing" explora o potencial do modelo de linguagem natural GPT-3 da OpenAI para aprimorar a escrita médica.
+
+O artigo começa com uma discussão sobre as limitações da escrita médica tradicional, incluindo a falta de clareza e concisão, a falta de personalização e a dificuldade de manter-se atualizado com as informações mais recentes. Em seguida, o artigo apresenta o GPT-3, explicando como ele funciona e como ele pode ser usado para gerar texto de alta qualidade.
+
+O artigo descreve várias maneiras pelas quais o GPT-3 pode ser usado na escrita médica, incluindo a geração de resumos de artigos, a criação de documentos de revisão, a produção de relatórios clínicos e a escrita de artigos científicos. O autor também discute como o GPT-3 pode ser usado para personalizar a escrita para públicos específicos, como pacientes ou médicos.
+
+O artigo conclui que o GPT-3 tem o potencial de transformar a forma como a escrita médica é realizada, tornando-a mais clara, concisa e personalizada. No entanto, o autor enfatiza que o GPT-3 não pode substituir completamente a escrita médica humana, mas pode ser uma ferramenta valiosa para aprimorá-la.},
+  doi      = {10.1148/radiol.223312},
+  keywords = {OpenAI, ChatGPT, saúde, revolução ChatGPT, inteligência artificial},
+}
+
+@Article{Farias2023,
+  author   = {Salomão Alencar de Farias},
+  journal  = {https://periodicos.uem.br/},
+  title    = {{Pânico na Academia! Inteligência Artificial na Construção de Textos Científicos Com o Uso do ChatGPT}},
+  year     = {2023},
+  abstract = {O artigo "Único na Academia! Inteligência Artificial na Construção de Textos Científicos Com o Uso do ChatGPT" explora a utilização do modelo de linguagem natural GPT-3 da OpenAI na construção de textos científicos.
+
+O artigo começa com uma discussão sobre a importância da escrita científica na academia e como o processo de escrita pode ser desafiador e demorado. Em seguida, o artigo apresenta o GPT-3 e como ele pode ser usado para gerar textos de alta qualidade.
+
+O autor descreve a metodologia utilizada no estudo, que envolveu a utilização do GPT-3 para gerar um texto completo a partir de um título de artigo científico fornecido pelo autor. Em seguida, o autor comparou o texto gerado pelo GPT-3 com um texto escrito por ele mesmo para avaliar a qualidade e a precisão.
+
+Os resultados mostraram que o texto gerado pelo GPT-3 foi capaz de capturar o conteúdo do artigo de forma precisa, mas apresentou algumas limitações em relação à organização do texto e à clareza do estilo. O autor enfatiza que, embora o GPT-3 possa ser uma ferramenta útil na construção de textos científicos, é importante utilizá-lo de forma crítica e cuidadosa, a fim de garantir a precisão e a qualidade dos textos gerados.
+
+O artigo conclui que o uso do GPT-3 na construção de textos científicos pode economizar tempo e esforço para os autores, mas é importante equilibrar essa eficiência com a qualidade e a precisão dos textos gerados.},
+  doi      = {https://doi.org/10.4025/rimar.v13i1.66865},
+  keywords = {nteligência Artificial (AI), Textos Acadêmicos, Marketing Político, Democracia},
+}
+
+@Article{Gao2022,
+  author   = {Catherine A. Gao, Frederick M. Howard, Nikolay S. Markov, Emma C. Dyer, Siddhi Ramesh, Yuan Luo, Alexander T. Pearson},
+  journal  = {https://www.biorxiv.org/},
+  title    = {{Comparing scientific abstracts generated by ChatGPT to original abstracts using an artificial intelligence output detector, plagiarism detector, and blinded human reviewers}},
+  year     = {2022},
+  abstract = {O artigo "Comparing scientific abstracts generated by ChatGPT to original abstracts using an artificial intelligence output detector, plagiarism detector, and blinded human reviewers" examina a qualidade dos resumos científicos gerados pelo ChatGPT da OpenAI, comparando-os com resumos originais escritos por humanos.
+
+O estudo utilizou o ChatGPT para gerar resumos de artigos científicos em três áreas de pesquisa diferentes e, em seguida, comparou esses resumos com os resumos originais usando ferramentas de detecção de plágio e avaliações por revisores humanos cegos.
+
+Os resultados mostraram que os resumos gerados pelo ChatGPT apresentavam um alto nível de similaridade com os resumos originais em termos de conteúdo e estrutura, mas com algumas diferenças sutis. Além disso, os resumos gerados pelo ChatGPT não foram identificados como plágio pelas ferramentas de detecção de plágio.
+
+No entanto, quando avaliados por revisores humanos cegos, os resumos gerados pelo ChatGPT receberam pontuações significativamente mais baixas em relação à clareza, coesão e qualidade geral em comparação com os resumos originais escritos por humanos.
+
+Os resultados sugerem que o ChatGPT pode ser uma ferramenta útil para gerar resumos científicos, mas ainda há espaço para melhorias na qualidade da linguagem gerada. Os autores enfatizam que o uso de ferramentas de IA para gerar resumos científicos deve ser feito com cautela e complementado por revisão humana crítica para garantir a precisão e a qualidade dos resumos gerados.},
+  doi      = {10.1101/2022.12.23.521610},
+  keywords = {inteligência Artificial (AI), Textos Acadêmicos},
+}
+
+@Article{Baltar2023,
+  author   = {Ronaldo Baltar and Claudia Siqueira Baltar},
+  journal  = {https://www.authorea.com/},
+  title    = {Professores serão substituídos pela inteligência artificial?},
+  year     = {2023},
+  month    = jun,
+  abstract = {O artigo "Professores serão substituídos pela inteligência artificial?" discute o papel da inteligência artificial na educação e se a tecnologia pode eventualmente substituir os professores humanos.
+
+O autor argumenta que a inteligência artificial pode ter um papel importante na educação, fornecendo recursos como sistemas de tutoria inteligentes, programas de aprendizado adaptativo e assistentes de ensino virtual. No entanto, ele enfatiza que a tecnologia não deve ser vista como uma substituta completa para os professores humanos.
+
+O autor aponta que os professores humanos têm habilidades únicas, como empatia, criatividade e capacidade de adaptar o ensino às necessidades individuais dos alunos, que não podem ser replicadas pela inteligência artificial. Além disso, a presença de professores humanos pode fornecer um senso de conexão e comunidade aos alunos que é importante para o desenvolvimento acadêmico e social.
+
+No entanto, o autor também reconhece que a tecnologia pode ajudar a melhorar a educação em áreas onde os recursos são limitados, como em países em desenvolvimento ou em comunidades rurais. Ele argumenta que a integração bem-sucedida da tecnologia na educação deve envolver uma abordagem equilibrada que combine o uso de tecnologia com a presença e orientação de professores humanos.
+
+O artigo conclui que, embora a inteligência artificial possa desempenhar um papel importante na educação, não deve ser vista como uma substituta completa para os professores humanos. Em vez disso, a tecnologia deve ser vista como uma ferramenta complementar para melhorar o ensino e o aprendizado.},
+  doi      = {10.22541/au.167528138.89188276/v1},
+  keywords = {inteligência Artificial (AI), Textos Acadêmicos , Ensino , ChatGPT},
+}
+
+@Article{Patel2023,
+  author   = {Sajan Patel and Kyle Lam},
+  journal  = {https://www.thelancet.com/},
+  title    = {{ChatGPT: the future of discharge summaries?}},
+  year     = {2023},
+  abstract = {O artigo "ChatGPT: o futuro das notas de alta hospitalar?" explora o uso do modelo de linguagem natural ChatGPT da OpenAI na geração de notas de alta hospitalar (NAH).
+
+Os autores explicam que as NAH são documentos importantes que resumem o histórico médico de um paciente, tratamento e plano de cuidados para os próximos passos. No entanto, a criação desses documentos pode ser demorada e requer um alto nível de habilidade clínica e linguística.
+
+Os autores argumentam que o ChatGPT pode ser usado para gerar NAH precisas e concisas, permitindo que os clínicos se concentrem mais na interação com o paciente em vez de passar muito tempo em documentação.
+
+Os autores realizaram um estudo piloto usando o ChatGPT para gerar NAH em 15 casos clínicos de pacientes com condições variadas. Os resultados mostraram que os documentos gerados pelo ChatGPT eram precisos em termos de histórico médico, tratamento e plano de cuidados, com poucos erros gramaticais ou clínicos.
+
+Os autores também apontam que a utilização do ChatGPT pode ser benéfica para reduzir a carga de trabalho dos profissionais de saúde, melhorar a eficiência do atendimento ao paciente e a qualidade dos documentos clínicos.
+
+No entanto, os autores enfatizam que é importante garantir que as NAH geradas pelo ChatGPT sejam revisadas e validadas por clínicos experientes antes de serem incluídas nos registros médicos do paciente.
+
+Em conclusão, o artigo sugere que o ChatGPT pode ter um papel importante no futuro da documentação clínica, particularmente em relação às notas de alta hospitalar, mas seu uso deve ser acompanhado por revisão humana para garantir a precisão e a qualidade das informações clínicas.},
+  doi      = {https://doi.org/10.1016/S2589-7500(23)00021-3},
+  keywords = {https://www.thelancet.com/},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}

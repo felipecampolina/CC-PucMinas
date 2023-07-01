@@ -1,0 +1,105 @@
+/*Paginas*/
+#listaRegistros {
+    display: none;
+}
+
+#cadastroRegistro {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body[page=lista] #listaRegistros {
+    display: block;
+}
+
+body[page=cadastro] #cadastroRegistro {
+    display: flex;
+}
+
+/*Estetica*/
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+table {
+    width: 100%;
+}
+
+table th,
+table td {
+    font-size: 14px;
+    padding: 10px 15px;
+    border: solid 1px #ccc;
+}
+
+button {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: royalblue;
+    color: white;
+    padding: 7px 20px;
+    margin: 4px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button.cinza {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: lightslategray;
+    color: whitesmoke;
+    padding: 7px 20px;
+    margin: 4px;
+}
+
+button.vermelho {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: rgb(196, 0, 0);
+    color: whitesmoke;
+    padding: 7px 20px;
+    margin: 4px;
+}
+
+input {
+    border: solid 1px #ccc;
+    border-radius: 4px;
+    padding: 10px;
+
+}
+
+.label {
+    text-align: center;
+
+}
+
+.label>div {
+    gap: 10px;
+}
+
+#cadastroRegistro {
+    padding: 70px;
+    gap: 10px;
+}
+
+
+
+.label>div>input {
+    flex: 1;
+}
+footer{
+    color: white;
+    text-align: center;
+}
+#footer{
+    padding: 0 0 0 0!important;
+    background-color: rgb(41, 39, 40);
+    height: 6.5rem!important;
+}

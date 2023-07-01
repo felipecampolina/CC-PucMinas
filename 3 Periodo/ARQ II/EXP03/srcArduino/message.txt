@@ -1,0 +1,317 @@
+//LEMBRETE: LEMBRAR DE ALTERAR TAMANHO DO VETOR PARA 100, VALOR DE 7 PARA TESTE
+
+
+#include <string.h>
+
+String vetor[100]; //criação do vetor com as 100 posições
+int x, y, w, op;
+int led_10 = 10;
+int led_11 = 11;
+int led_12 = 12;
+int led_13 = 13;
+
+String PC = "4";
+
+void setup() {
+  int qntdOp = 0;
+  Serial.begin(9600);
+  pinMode(led_10, OUTPUT);
+  pinMode(led_11, OUTPUT);
+  pinMode(led_12, OUTPUT);
+  pinMode(led_13, OUTPUT);
+  
+  vetor[0] = "4"; //amarração da posição inicial no PC
+  vetor[1] = "0";
+  vetor[2] = "0";
+  vetor[3] = "0";
+  
+  int i = 4;
+  String flag = "FIM";
+  String palavra;
+  
+  //atribuindo os comandos escritos no vetor a partir da 4° posição
+  while (palavra != flag && i<100){
+    if (Serial.available() > 0){
+    	palavra = Serial.readStringUntil(' ');
+      if (palavra != flag){
+        qntdOp++;
+        vetor[i] = palavra;
+        i++;
+      }
+    }
+  }
+  
+  i = 4; //como se fosse um ponteiro no vetor
+
+  
+  for (int j=0; j<4+qntdOp; j++){ //for de teste
+   		 Serial.println(vetor[j]);
+    }
+  	Serial.println();
+  
+  
+  
+  while (i<4+qntdOp){
+    
+  	//isso deve ser feito em loop, estou fazendo só pra 1 comando
+  	palavra = vetor[i]; //pegar o comando em formato de String
+    vetor[0] = String(i); //atribuindo o valor do PC na primeira posição do vetor
+  	vetor[2] = String(palavra[0]); //atribuição do X no vetor
+  	vetor[3] = String(palavra[1]); //atribuição do Y no vetor
+
+  	
+  	x = retornarInteiro(String(palavra[0])); //atribuição e conversão da string X para um inteiro
+  	y = retornarInteiro(String(palavra[1])); //atribuição e conversão da string Y para um inteiro
+  	op = retornarInteiro(String(palavra[2]));
+  	
+  	int w = fazerOperacoes(x, y, op);
+  	vetor[1] = String(w); //retornando o valor da operação em W no vetor
+    String w_string = "";
+    
+    int k = i;
+    k++;
+
+     vetor[0] = String(k); //atribuindo o valor do PC na primeira posição do vetor
+    
+        for (int j=0; j<4+qntdOp; j++){ //for de teste
+          if(j==1){ 
+            char resp;
+            int teste2 = retornarInteiro(vetor[j]);
+            String x = String (teste2,HEX);
+             x.toUpperCase();
+            resp = x.charAt(x.length()-1);
+            w_string = String(resp);
+            Serial.println(resp);
+            
+          }
+          else{
+    Serial.println(vetor[j]);
+          }
+    }
+  	
+    w = retornarInteiro(w_string);
+    String w_binario = toBinary(w);
+
+    if(w_binario[0] == '1'){
+      digitalWrite(led_13,HIGH);
+    } else {
+      digitalWrite(led_13,LOW);
+    }
+    
+    if(w_binario[1] == '1'){
+      digitalWrite(led_12,HIGH);
+    } else {
+      digitalWrite(led_12,LOW);
+    }
+    
+    if(w_binario[2] == '1'){
+      digitalWrite(led_11,HIGH);
+    } else {
+      digitalWrite(led_11,LOW);
+    }
+    
+    if(w_binario[3] == '1'){
+      digitalWrite(led_10,HIGH);
+    } else {
+      digitalWrite(led_10,LOW);
+    }
+    
+    Serial.println();
+    i++;
+    delay(3500);
+    
+	}
+  }
+  
+
+
+void loop() {
+  
+}
+
+
+//FUNÇÕES
+int retornarInteiro(String myString){
+  int i_int = 0;
+  if (myString.compareTo("9") <= 0){
+    i_int = myString.toInt();
+  }
+  
+  else {
+    switch (myString[0]) {
+    	case 'A': 
+      		i_int = 10;
+     		break;
+    	case 'B': 
+      		i_int = 11;
+      		break;
+    	case 'C': 
+      		i_int = 12;
+      		break;
+    	case 'D': 
+      		i_int = 13;
+      		break;
+    	case 'E': 
+      		i_int = 14;
+      		break;
+    	case 'F': 
+      		i_int = 15;
+      		break;
+  	}
+  }
+  return i_int;
+}
+String retornaHex(int a ){
+  String saida = "";
+  
+  
+  
+  switch (a) {
+    	case 10: 
+      		saida = "A";
+     		break;
+    	case 11: 
+      		saida = "B";
+      		break;
+    	case 12: 
+      		saida = "C";
+      		break;
+    	case 13: 
+      		saida = "D";
+      		break;
+    	case 14: 
+      		saida = "E";
+      		break;
+    	case 15: 
+      		saida = "F";
+      		break;
+    	default:
+    saida = String(a);
+    break;
+    
+    return saida;
+    
+  	}
+}
+
+String toBinary(int n)
+{
+    String r;
+  	String r_invertido;
+  
+    while (n != 0){
+        r += ( n % 2 == 0 ? "0" : "1" );
+        n /= 2;
+    }
+  
+  	while(r.length() < 4){
+      r += "0";
+  	}
+  	
+  	for ( int i = r.length()-1; i >= 0; i--)
+    {
+        r_invertido += r[i];
+    }
+  
+    return r_invertido;
+}
+
+int fazerOperacoes(int a, int b, int op){
+   // A -> X
+   // B -> Y
+  int saida = 0; 
+  
+  switch (op){
+    case 0: saida = ~a; //NOT A
+    break;
+    
+    case 1: saida = ~b;//NOT B
+    break;
+    
+    case 2: saida = 1;//IGUAL A 1 ?
+    break;
+    
+    case 3: saida = 0; //IGUAL A 0 ?
+    break;
+    
+    case 4: saida = ~(a&b);//NOT(A E B)
+    break;
+    
+    case 5: saida = ~(a|b);//NOT (A OU B)
+    break;
+    
+    case 6: saida = (a^b); //A XOR B
+    break;
+    
+    case 7: saida = a&(~b); //A E B'
+    break;
+    
+    case 8: saida = (~a)&b; //A' E B
+    break;
+    
+    case 9: saida = ~(a^b);//NOT (A XOR B)
+    break;
+    
+    case 10: saida = (a|b);//A OU B
+    break;
+    
+    case 11: saida = (a&b); //A E B
+    break;
+    
+    case 12: saida = (~a)&b;//A' E B
+    break;
+    
+    case 13: saida = a|(~b); //A OU B'
+    break;
+    
+    case 14: saida = b; //IGUAL A B
+    break;
+    
+    case 15: saida = a;//IGUAL A A
+    break;
+  return saida;
+  }
+}
+
+/* PASSO A PASSO:
+Entrada -> String no formato XYS 
+X = primeiro valor
+Y = segundo valor
+S = operação 
+
+1) Criar um vetor 
+	- 100 posições
+
+[0] = PC (começa valendo 4) -> int?
+[1] = W (saída da operação) 
+[2] = X -> String
+[3] = Y -> String
+
+2) Comandos a partir da [4] -> fixos 
+	-> Cada comando vai ser separadas por espaço 
+	A3B / 8CD / 721 ... (OK)
+
+3) Atribuição dos valores de X, Y e S em char (OK)
+
+5) Transformar os char em int (OK)
+
+6) Switch case com as operações (EM PROCESSO)
+
+7) Retornar o valor em inteiro para uma variável auxiliar (OK)
+ 
+8) Transformar o valor da variável auxiliar em String e jogar para W (OK)
+
+9) Transformar o valor do PC em int, incrementar 1, transformar em String de novo (OK)
+
+10) Adicionar os leds -> já estão configurados, falta colocar 
+
+11) Alterar o tamanho do vetor para 100
+
+12) Adicionar o tempo
+
+13) Fazer o que essa observação pede:
+Observe que não mostramos todo o vetor (ou a nossa memória), apenas até onde temos alguma
+coisa na memória.
+
+14) Não entendi o que deve ser feito no DUMP de memória
+*/

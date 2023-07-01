@@ -1,0 +1,107 @@
+Aluno: Felipe Campolina Soares de Paula 
+Matricula: 762732
+----------------------------------------------------
+
+
+Arquivo ATORES:
+Índice primário 
+Fator de bloco: 64
+Número de blocos necessários: 15 
+Espaço necessário: 30720 bytes
+Pesquisas demandam 4 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo
+
+Arquivo CLIENTES:
+Índice primário 
+Fator de bloco: 75
+Número de blocos necessários: 267 
+Espaço necessário: 546816 bytes
+Pesquisas demandam 9 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo
+
+Arquivo FILMES:
+Índice primário 
+Fator de bloco: 64
+Número de blocos necessários: 3907 
+Espaço necessário: 8001536 bytes
+Pesquisas demandam 12 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo
+
+
+Arquivo FUNCIONARIOS:
+
+Índice primário 
+Fator de bloco: 75
+Número de blocos necessários: 5 
+Espaço necessário: 10240 bytes
+Pesquisas demandam 3 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo
+
+Índice Secundário CPF_Supervisor
+Fator de bloco: 75
+Número de blocos necessários: 47 
+Espaço necessário: 96256 bytes
+Pesquisas demandam 6 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo indexado
+
+Arquivo MIDIAS
+
+Índice primário
+Fator de bloco: 51
+Número de blocos necessários: 7003
+Espaço necessário: 14342144 bytes
+Pesquisas demandam 13 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo
+
+Indice Secunsario CodFilme
+Fator de bloco: 64
+Número de blocos necessários: 156250
+ Espaço necessário: 320000000 bytes
+Pesquisas demandam 18 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo indexado
+
+Arquivo ALUGEL
+Índice primário 
+Fator de bloco: 73
+Número de blocos necessários: 12454 Espaço necessário: 25505792 bytes
+Pesquisas demandam 14 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo
+
+Índice secundario CPF_Cliente
+Fator de bloco: 75
+Número de blocos necessários: 266667
+Espaço necessário: 546134016 bytes
+Pesquisas demandam 19 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo indexado
+
+
+Índice secundario ID_Midia
+Fator de bloco: 51
+Número de blocos necessários: 392157 
+Espaço necessário: 803137536 bytes
+Pesquisas demandam 19 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo indexado
+
+Aqruivo PAGAMENTO
+Índice primário
+Fator de bloco: 32
+Número de blocos necessários: 104167 
+Espaço necessário: 213334016 bytes
+Pesquisas demandam 17 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo
+
+Índice secundario ID_MIDIA
+Fator de bloco: 51
+Número de blocos necessários: 980393 
+Espaço necessário: 2007844864 bytes
+Pesquisas demandam 20 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo indexado
+
+
+Aqruivo ATORESEMFILMES
+Índice Secundário CodFilme
+Fator de bloco: 64
+Número de blocos necessários: 15625 
+Espaço necessário: 32000000 bytes
+Pesquisas demandam 14 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo indexado
+
+
+Índice Secundário CodAtor
+ Fator de bloco: 64
+Número de blocos necessários: 15625
+Espaço necessário: 32000000 bytes
+Pesquisas demandam 14 acessos a blocos de disco + 1 acesso para recuperar o registro no arquivo indexado
+
+
+
+
+
+

@@ -1,0 +1,731 @@
+#Ex 01
+#s0 = a
+#s1 = b
+#s2 = c
+
+addi $s0,$zero,10
+addi $s1,$zero,-1
+addi $s0,$s0,1
+add $s2,$s1,$s0
+-----------------------------
+
+#Ex 02
+#s0 = x
+#s1 = y
+
+
+addi $s0,$zero,3 # x = 3
+add $t0,$s0,$s0 #t0 = 2x
+add $s1,$t0,$t0 #s1 = 4x
+
+
+---------------------------------
+
+#Ex 03
+#s0 = x
+#s1 = y
+
+
+addi $s0,$zero,3 # x = 3
+add $t0,$s0,$s0 #t0 = 2x
+add $t0,$t0,$t0 #s1 = 4x
+add $t0,$t0,$t0 #s1 = 8x
+add $t0,$t0,$t0 #s1 = 16x
+add $t0,$t0,$t0 #s1 = 32x
+add $t0,$t0,$t0 #s1 = 64x
+add $t0,$t0,$t0 #s1 = 128x
+add $t0,$t0,$t0 #s1 = 256x
+add $t0,$t0,$t0 #s1 = 512x
+add $t0,$t0,$t0 #s1 = 1024x
+add $s1,$t0,$s0 # s1 = 1025x
+
+---------------------------------------------
+
+#Ex 04
+#x = 3 / 4
+#s0 = x
+#s1 = y
+
+
+addi $s0,$zero,3 # x = 3
+srl $s1,$s0,2 #y = x/4
+
+-------------------------------------------
+#Ex 05
+#x = 305419896
+#s0 = x
+
+
+
+addi $s0,$zero,0x12345678
+
+
+
+
+-----------------------------------------------
+#Ex 06
+#x = -1
+#y = x/32
+#s0 = x
+#s1 = y
+
+
+
+addi $s0,$zero,-1
+srl $s1,$s0,5
+
+
+
+
+-----------------------------------
+#Ex 07
+#x = A [ 12 ] = h + A [ 8 ];
+
+addi $s0,$zero,100 
+addi $s2,$zero,1  # h = 1
+
+lui $t0,0x1001
+
+sw $s0,8($t0)
+
+lw $t1, 8($t0)   
+
+add $t1, $t1, $s2 
+
+sw $t1, 12($a0)
+
+
+-----------------------------------------
+
+
+#Ex 08
+#x = h = k + A[i]
+#s0 = h
+#s1 = k 
+#s3 = i
+
+addi $s1,$zero,0  # K = 0
+addi $s3,$zero,4  # i = 4
+
+lui $t0,0x1001
+
+lw $t1, 4($t0)   
+
+add $s0, $s1, $t1 # h = K+ A[i]
+
+
+
+
+----------------------------------
+#Ex 09
+#x = h = k + A[i]
+#s0 = h
+#s1 = k 
+#s3 = i
+
+addi $s1,$zero,0  # K = 0
+addi $s3,$zero,4  # i = 4
+
+lui $t0,0x1001
+
+lw $t1, 4($t0)   
+
+add $s0, $s1, $t1 # h = K+ A[i]
+
+sw $s0,12($t0) # a[j] = K + a[i]
+
+
+---------------------------------
+#Ex 10
+#x = h = A [ i ] ;
+ #A[ i ] = A [ i + 1] ;
+ #A [ i + 1] = h ;
+#s0 = h
+#s1 = k 
+#s3 = i
+
+lw $t0, i($a0)         # Carrega o valor de A[i] em $t0 ($a0 é o endereço base do array A)
+lw $t1, (i+1)($a0)     # Carrega o valor de A[i+1] em $t1
+
+move $t2, $t0          # Move o valor de A[i] para $t2 (h)
+sw $t2, (i+1)($a0)     # Armazena o valor de h em A[i+1]
+
+move $t2, $t1          # Move o valor de A[i+1] para $t2
+sw $t2, i($a0)         # Armazena o valor de A[i+1] em A[i]
+
+
+--------------------------------------
+#Ex 11
+
+addi $s0,$zero,0 # j = 0
+addi $s1,$zero,10 #i = 10
+
+
+loop:
+addi $s0,$s0,1
+bne $s0,$s1,loop
+
+-------------------------------------
+#Ex 12
+
+
+lui $t0,0x1001
+
+lw $s1,0($t0)
+
+
+slti $s2,$s1,0
+
+
+# negativo se s2 for 1 
+
+
+.data
+value: .word 10
+
+-----------------------------------------
+#ex 13
+.data
+    TEMP:  .word  0      # Variável de temperatura
+    FLAG:  .word  0      # Variável de sinalizador
+
+.text
+    # Leitura do valor de temperatura da memória
+    lw $t0, TEMP      # Carrega o valor de TEMP na registrador $t0
+
+    # Comparação da temperatura
+    li $t1, 30        # Carrega o valor limite inferior (30) em $t1
+    li $t2, 50        # Carrega o valor limite superior (50) em $t2
+
+    ble $t1, $t0, check_upper_limit  # Verifica se TEMP >= 30
+    j set_flag_zero                   # Se TEMP < 30, definir FLAG como zero
+
+check_upper_limit:
+    ble $t0, $t2, set_flag_one   # Verifica se TEMP <= 50
+    j set_flag_zero              # Se TEMP > 50, definir FLAG como zero
+
+set_flag_one:
+    li $t3, 1         # Carrega o valor 1 em $t3
+    sw $t3, FLAG      # Define FLAG como 1
+    j end_program
+
+set_flag_zero:
+    sw $zero, FLAG    # Define FLAG como 0
+
+end_program:
+    # Seu código continua aqui
+
+--------------------------------------------------------
+#ex 14
+.data
+    array:  .word  5, 2, 9, 1, 7, 3, 8, 6, 4, 10      # Vetor de elementos desordenados
+
+.text
+    main:
+        # Inicialização
+        la $t0, array         # Carrega o endereço base do vetor em $t0
+        li $t1, 100           # Define o tamanho do vetor como 100
+        li $t2, 1             # Define o valor inicial de swapped como 1
+
+        # Loop externo - itera até que não haja mais trocas
+        outer_loop:
+            li $t3, 0          # Define o valor inicial de swapped na iteração atual como 0
+            li $t4, 1          # Define o índice de iteração interna como 1
+
+            # Loop interno - compara e troca elementos adjacentes
+            inner_loop:
+                lw $t5, ($t0)        # Carrega o elemento atual em $t5
+                lw $t6, 4($t0)       # Carrega o elemento seguinte em $t6
+
+                bgt $t5, $t6, swap   # Se o elemento atual for maior que o seguinte, salta para o rótulo "swap"
+
+                addi $t0, $t0, 4     # Incrementa o ponteiro do vetor em 4 bytes
+                addi $t4, $t4, 1     # Incrementa o índice de iteração interna em 1
+                blt $t4, $t1, inner_loop  # Se o índice de iteração interna for menor que o tamanho do vetor, continua o loop interno
+                j end_inner_loop     # Caso contrário, encerra o loop interno
+
+            swap:
+                # Troca os elementos
+                sw $t6, ($t0)    # Armazena o elemento seguinte no local atual
+                sw $t5, 4($t0)   # Armazena o elemento atual no local seguinte
+                li $t3, 1        # Define o valor de swapped na iteração atual como 1
+
+                addi $t0, $t0, 4  # Incrementa o ponteiro do vetor em 4 bytes
+                addi $t4, $t4, 1  # Incrementa o índice de iteração interna em 1
+                blt $t4, $t1, inner_loop  # Se o índice de iteração interna for menor que o tamanho do vetor, continua o loop interno
+                j end_inner_loop  # Caso contrário, encerra o loop interno
+
+            end_inner_loop:
+                beqz $t3, outer_loop  # Se swapped for igual a zero, encerra o loop externo
+
+        end_outer_loop:
+        # Seu código continua aqui
+
+
+--------------------------------------------------------------
+ex15
+#Questao15
+.data
+value: .word 10 0 # x
+
+.text
+lui $t0,0x1001
+addi $t1,$zero,2
+
+lw $t2,($t0) # t2 = x
+
+confereParidade:
+div $t2,$t1
+mfhi $t3
+beqz $t3,par
+j impar
+
+
+
+par:
+
+xQuarta:
+mul $s1,$t2,$t2
+mul $t4,$s1,$s1 # t^4 = $t4
+
+xTerceira:
+mul $s1,$t2,$t2
+mul $t5,$s1,$t2 # t^3 = $t3
+
+xADois:
+add $t6,$t2,$t2
+mul $t7,$t6,$t6 # 2x^2 = $t7
+
+add $s2,$t4,$t3
+add $s2,$s2,$s7
+
+#S2 = soma de tudo
+
+
+
+impar: 
+
+
+
+xTerceira2:
+mul $s1,$t2,$t2
+mul $t5,$s1,$t2 # t^3 = $t3
+
+xQuinta:
+mul $s1,$t2,$t2
+mul $t4,$s1,$s1 # t^4 = $t4
+mul $t4,$t4,$t2 # t^5 = $t4
+
+
+sub $s2,$t3,$t4
+addi $s2,$s2,1
+-------------------------------------------------------------
+#ex16
+.data
+    x:   .word  0      # Variável para armazenar o valor de x
+    y:   .word  0      # Variável para armazenar o valor de y
+
+.text
+    main:
+        # Leitura do valor de x da memória
+        lw $t0, x      # Carrega o valor de x no registrador $t0
+
+        # Verificação e cálculo de y
+        bgtz $t0, greater_than_zero   # Se x > 0, pula para o cálculo y = x^3 + 1
+        addi $t1, $t0, -1             # Se x <= 0, y = x^4 - 1
+        j write_y                     # Pula para escrever o valor de y na memória
+
+    greater_than_zero:
+        mul $t2, $t0, $t0      # x^2
+        mul $t2, $t2, $t0      # x^3
+        addi $t1, $t2, 1       # y = x^3 + 1
+
+    write_y:
+        sw $t1, y                     # Armazena o valor de y na segunda posição livre da memória
+
+-------------------------------------------------------------
+ex17
+.data
+    fibonacci:  .space 400     # Espaço para armazenar os 100 termos da série Fibonacci
+
+.text
+    main:
+        # Inicialização
+        la $t0, fibonacci     # Carrega o endereço base do vetor Fibonacci em $t0
+        li $t1, 100           # Define o número de termos a serem calculados como 100
+
+        # Inicializa os dois primeiros termos como 1
+        li $t2, 1             # Primeiro termo
+        li $t3, 1             # Segundo termo
+
+        # Armazena os dois primeiros termos na memória
+        sw $t2, ($t0)         # Armazena o primeiro termo na primeira posição livre da memória
+        sw $t3, 4($t0)        # Armazena o segundo termo na próxima posição livre da memória
+
+        addi $t0, $t0, 8     # Incrementa o ponteiro do vetor em 8 bytes (2 termos de 4 bytes cada)
+
+        # Loop para calcular e armazenar os próximos termos
+        li $t4, 2            # Contador para controlar o número de termos já calculados (começa em 2)
+
+        loop:
+            add $t4, $t4, 1    # Incrementa o contador de termos já calculados
+
+            add $t5, $t2, $t3  # Calcula o próximo termo somando os dois termos anteriores
+
+            sw $t5, ($t0)      # Armazena o próximo termo na próxima posição livre da memória
+
+            addi $t0, $t0, 4   # Incrementa o ponteiro do vetor em 4 bytes (1 termo de 4 bytes)
+
+            move $t2, $t3      # Atualiza o primeiro termo com o valor do segundo termo
+            move $t3, $t5      # Atualiza o segundo termo com o valor do próximo termo
+
+            blt $t4, $t1, loop  # Se o número de termos já calculados for menor que 100, continua o loop
+
+        # Seu código continua aqui
+-------------------------------------------------------------------------------------------------------
+#ex18
+.data
+    number:  .word  0      # Variável para armazenar o número lido
+    flag:    .word  0      # Variável para armazenar o flag
+
+.text
+    main:
+        # Leitura do número da memória
+        lw $t0, number      # Carrega o valor de number no registrador $t0
+
+        # Verificação do número e definição do flag
+        li $t1, 50          # Limite inferior 1
+        li $t2, 100         # Limite superior 1
+        li $t3, 150         # Limite inferior 2
+        li $t4, 200         # Limite superior 2
+
+        slt $t5, $t0, $t1   # Verifica se o número é menor que o limite inferior 1
+        slt $t6, $t2, $t0   # Verifica se o número é maior que o limite superior 1
+        slt $t7, $t0, $t3   # Verifica se o número é menor que o limite inferior 2
+        slt $t8, $t4, $t0   # Verifica se o número é maior que o limite superior 2
+
+        or $t9, $t5, $t6    # Verifica se o número está na faixa 1
+        or $t10, $t7, $t8   # Verifica se o número está na faixa 2
+
+        or $t11, $t9, $t10  # Combina as duas verificações
+
+        beqz $t11, set_flag_zero   # Se o flag for igual a zero, define flag como 0
+        li $t12, 1                 # Se o flag for igual a um, define flag como 1
+        sw $t12, flag              # Armazena o flag na memória
+
+        set_flag_zero:
+        sw $zero, flag             # Define o flag como 0
+
+-------------------------------------------------------------------------------------
+ex19
+.data
+    A:   .word  0      # Primeiro número
+    B:   .word  0      # Segundo número
+    C:   .word  0      # Terceiro número
+    Med: .word  0      # Mediana
+
+.text
+    main:
+        # Leitura dos números da memória
+        lw $t0, A      # Carrega o valor de A no registrador $t0
+        lw $t1, B      # Carrega o valor de B no registrador $t1
+        lw $t2, C      # Carrega o valor de C no registrador $t2
+
+        # Encontra a mediana
+        blt $t0, $t1, check_second   # Se A < B, verifica se B < C
+        bgt $t0, $t1, check_third    # Se A > B, verifica se A > C
+        j set_median                 # Se A = B, pula para definir a mediana como A
+
+    check_second:
+        blt $t1, $t2, set_median     # Se B < C, a mediana é B
+        bgt $t0, $t2, set_median     # Se A > C, a mediana é A
+        j set_median                 # Se B < C e A < C, a mediana é C
+
+    check_third:
+        bgt $t1, $t2, set_median     # Se B > C, a mediana é B
+        blt $t0, $t2, set_median     # Se A < C, a mediana é A
+        j set_median                 # Se B > C e A > C, a mediana é C
+
+    set_median:
+        sw $t0, Med                  # Armazena a mediana na posição seguinte aos 3 números
+
+        # Seu código continua aqui
+
+------------------------------------------------------------------------------------------------
+#ex20 V 1.0
+
+.data
+array: .word 0,1,2,3,4,5,6,7,8,9,10,
+
+
+
+.text
+
+lui $t0,0x1001
+
+
+loop:
+lw $t1,($t0)
+addi $t0,$t0,4
+addi $t2,$t2,1
+add $s1,$t1,$s1
+
+beq $t2,99,fim 
+j loop
+
+fim:
+-------------------------------------------------------------------------------------------
+
+ex21 - contas
+--------------------------------------------------------------------------------------------
+ex 22
+   .data
+result:  .word 0               # Variável para armazenar a soma dos elementos
+
+    .text
+    .globl main
+main:
+    # Exemplo de chamada da função
+    li $a0, 0x1000   # Endereço de memória do vetor
+    li $a1, 10      # Quantidade de elementos
+
+    # Chamada da função
+    jal soma_vetor
+
+    # O resultado é armazenado em $v0
+    move $t0, $v0
+
+    # Termina o programa
+    li $v0, 10
+    syscall
+
+# Função que cria um vetor e retorna a soma dos elementos
+soma_vetor:
+    # Argumentos:
+    # $a0 = endereço de memória do vetor
+    # $a1 = quantidade de elementos
+
+    # Inicializa o contador e a soma
+    li $t0, 0       # Contador
+    li $t1, 0       # Soma
+
+loop:
+    # Carrega o índice atual
+    move $t2, $t0
+
+    # Verifica se o índice é par
+    andi $t3, $t2, 1
+    beqz $t3, par    # Pula para o código se o índice for par
+
+impar:
+    # y[i] = i se i for ímpar
+    addu $t4, $t1, $t2   # y[i] = i
+    add $t1, $t1, $t4    # Incrementa a soma
+
+    j next
+
+par:
+    # y[i] = 2i - 1 se i for par
+    sll $t2, $t2, 1      # Multiplica o índice por 2
+    sub $t4, $t2, 1      # Subtrai 1
+    add $t1, $t1, $t4    # Incrementa a soma
+
+next:
+    # Calcula o próximo endereço de memória
+    addi $a0, $a0, 4
+
+    # Incrementa o contador
+    addi $t0, $t0, 1
+
+    # Verifica se todos os elementos foram percorridos
+    bne $t0, $a1, loop
+
+    # Armazena o resultado na variável result
+    sw $t1, result
+
+    # Retorna o resultado em $v0
+    move $v0, $t1
+
+    jr $ra
+
+---------------------------------------------------------------
+ex 23
+   .data
+result:  .word 0               # Variável para armazenar o resultado
+
+    .text
+    .globl main
+main:
+    # Exemplo de entrada de dados
+    li $v0, 5       # Código da syscall para leitura de inteiro
+    syscall         # Lê o primeiro número
+    move $t0, $v0   # Move o valor lido para o registrador $t0
+
+    li $v0, 5       # Código da syscall para leitura de inteiro
+    syscall         # Lê o segundo número
+    move $t1, $v0   # Move o valor lido para o registrador $t1
+
+    # Chama a função para calcular o primeiro número elevado ao segundo
+    jal calcular_potencia
+
+    # O resultado é armazenado em $v0
+    move $t2, $v0
+
+    # Armazena o resultado na terceira posição da memória
+    sw $t2, result
+
+    # Termina o programa
+    li $v0, 10
+    syscall
+
+# Função que calcula o primeiro número elevado ao segundo
+calcular_potencia:
+    # Argumentos:
+    # $t0 = primeiro número
+    # $t1 = segundo número
+
+    # Inicializa o resultado
+    li $t2, 1
+
+    loop:
+    # Verifica se o segundo número é zero
+    beqz $t1, end_loop
+
+    # Multiplica o resultado pelo primeiro número
+    mul $t2, $t2, $t0
+
+    # Decrementa o segundo número
+    subi $t1, $t1, 1
+
+    # Repete o loop
+    j loop
+
+    end_loop:
+    # Retorna o resultado em $v0
+    move $v0, $t2
+
+    jr $ra
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------
+.data
+array: .word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+    .text
+    .globl main
+main:
+    # Exemplo de chamada das funções
+    la $a0, array
+    li $a1, 25
+    jal criar_vetor
+
+    li $v0, 5
+    syscall
+    move $t0, $v0   # Move o primeiro número lido para $t0
+
+    li $v0, 5
+    syscall
+    move $t1, $v0   # Move o segundo número lido para $t1
+
+    jal calcular_soma
+    move $t2, $v0   # Move o resultado para $t2
+
+    # Termina o programa
+    li $v0, 10
+    syscall
+
+# Função que cria um vetor com base no endereço e quantidade de elementos
+criar_vetor:
+    # Argumentos:
+    # $a0 = endereço de memória do vetor
+    # $a1 = quantidade de elementos
+
+    # Limita a quantidade de elementos a 30
+    li $t3, 30
+    sltu $t4, $a1, $t3
+    movz $a1, $t3, $t4
+
+    # Inicializa o contador e o endereço
+    li $t0, 0       # Contador
+    move $t1, $a0   # Endereço de memória inicial
+
+loop_vetor:
+    # Carrega o índice atual
+    move $t2, $t0
+
+    # Verifica se o índice é par
+    andi $t3, $t2, 1
+    beqz $t3, par    # Pula para o código se o índice for par
+
+impar:
+    # y[i] = i^2 se i for ímpar
+    mul $t4, $t2, $t2   # i^2
+    sw $t4, ($t1)       # Armazena o valor no endereço de memória
+
+    j next_vetor
+
+par:
+    # y[i] = 2i^2 + 2i + 1 se i for par
+    mul $t4, $t2, $t2       # i^2
+    sll $t5, $t2, 1         # 2i
+    add $t5, $t5, $t2       # 2i + i = 3i
+    addi $t5, $t5, 1        # 2i + 2i + 1 = 3i + 1
+    add $t4, $t4, $t5       # 2i^2 + 2i + 1
+    sw $t4, ($t1)           # Armazena o valor no endereço de memória
+
+next_vetor:
+    # Calcula o próximo endereço de memória
+    addiu $t1, $t1, 4
+
+    # Incrementa o contador
+    addi $t0, $t0, 1
+
+    # Verifica se chegou ao fim do vetor
+    sltu $t3, $t0, $a1
+    bnez $t3, loop_vetor
+
+    jr $ra
+
+# Função que calcula a soma de todos os elementos do vetor
+calcular_soma:
+    # Variáveis:
+    # $a0 = endereço de memória do vetor
+    # $a1 = quantidade de elementos
+
+    # Inicializa o acumulador de soma
+    li $t2, 0
+
+loop_soma:
+    # Carrega o valor do vetor
+    lw $t3, ($a0)
+
+    # Incrementa o acumulador
+    add $t2, $t2, $t3
+
+    # Calcula o próximo endereço de memória
+    addiu $a0, $a0, 4
+
+    # Decrementa a quantidade de elementos
+    addi $a1, $a1, -1
+
+    # Verifica se chegou ao fim do vetor
+    sltu $t4, $a1, 1
+    bnez $t4, loop_soma
+
+    # Retorna o resultado em $v0
+    move $v0, $t2
+
+    jr $ra

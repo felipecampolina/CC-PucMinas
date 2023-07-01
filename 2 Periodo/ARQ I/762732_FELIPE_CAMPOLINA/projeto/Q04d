@@ -1,0 +1,76 @@
+;Felipe Campolina 
+;Q04 e - 762732
+;Erro d
+
+Start:	load respAnt
+	add resp
+	store resp
+	load resp
+	write
+	load respAnt
+	store aux
+	load resp
+	store respAnt
+	load aux
+	add resp
+	store resp
+	load resp
+	write
+	load respAnt
+	store aux
+	load resp
+	store respAnt
+	load aux
+	add resp
+	store resp
+	load resp
+	write
+	load respAnt
+	store aux
+	load resp
+	store respAnt
+	load aux
+	add resp
+	store resp
+	load resp
+	write
+	load respAnt
+	store aux
+	load resp
+	store respAnt
+	load aux
+	add resp
+	store resp
+	load resp
+	write
+	load respAnt
+	store aux
+	load resp
+	store respAnt
+	load aux
+	add resp
+	store resp
+	load resp
+	write
+load respAnt
+	store aux
+	load resp
+	store respAnt
+	load aux
+	add resp
+	store resp
+	load resp
+	write
+load respAnt
+	store aux
+	load resp
+	store respAnt
+	load aux
+	add resp
+	store resp
+	load resp
+	write
+
+resp:	.data 2 1
+respAnt:.data 2 0
+aux:	.data 2 0

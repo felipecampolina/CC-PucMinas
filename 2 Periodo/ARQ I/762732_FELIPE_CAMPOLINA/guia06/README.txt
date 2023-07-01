@@ -1,0 +1,1 @@
+Tive algumas dificuldades na questao 2, quando usamos maxtermos, e na questao 6, pois o circuito mostrado aperece com 3 entradas em portas

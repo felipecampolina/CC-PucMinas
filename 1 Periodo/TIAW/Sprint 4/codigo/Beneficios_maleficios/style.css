@@ -1,0 +1,35 @@
+.geral{
+    display: flex;
+    justify-content: space-around ;
+    color: white;
+    
+
+
+}
+h1{
+    margin: 100 10 10 10;
+}
+.geral li{
+    list-style: none;
+    margin-bottom: 15rem!important;
+}
+.beneficios{
+    border-left: 2px solid black;
+    padding-left: 50px;
+    
+}
+a.navbar-brand{
+    margin-left: 20px!important;
+}
+body{
+    background-color: rgb(71, 70, 70)!important;
+}
+footer{
+    color: white;
+    text-align: center;
+}
+#footer{
+    padding: 0 0 0 0!important;
+    background-color: rgb(41, 39, 40);
+    height: 6.5rem!important;
+}

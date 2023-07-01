@@ -1,0 +1,17 @@
+.desafios_selecionar {
+    display:flex;
+    flex-wrap: wrap;
+    list-style: none;
+
+}
+
+.col-5 img{
+    opacity: 20%;
+}
+.container{
+    background-color: gray;
+}
+nav.navbar.navbar-expand-lg.navbar-light.bg-light{
+    background-color: rgb(80, 80, 80)!important;
+    margin-bottom: 10px;
+}

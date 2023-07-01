@@ -1,0 +1,75 @@
+RESUMO DE COMPLEXIDADE:
+
+
+Somatório de Gaus: n * (n+1) / 2
+
+Complexidade:
+
+	FOR:
+	for(i = 0 ; i<n ;i++) -- N 
+	for(i = 0 ; i<=n; i++) -- N+1
+	for(i = 1 ; i<n ; i++) -- N-1
+	for(i = 3 ; i<n ; i++0 -- N -3
+	for()for() -- MULTIPLICA
+	for(i = n ; i>0 ; i/=2) -- LG N + 1
+	for(i = a ; i<n ; i++) n - a
+	
+
+	WHILE:
+	condicaoEntrada() + n * [CODIGO() + condicao()]
+	
+
+	DO-WHILE:
+ 	n * [CODIGO() + condicao()]
+
+
+	NOTACAO:
+	O é o limite superior
+	Ω é o limite inferior
+	𝚯 é o limite justo
+
+
+Caminhamento: 
+Central - i.esq - printa - i .dir --- 
+
+Pre - printa - i.esq - i.dir
+Pos - i.esq - i.dir - printa
+
+Central - 9 15 19 28 58 51 52 56 70
+Pre - 28 15 9 19 56 51 48 52 70 
+pos   9 19 15 48 52 51 70 56 28
+
+
+
+Central - i.esq printa i.dir
+pre - printa i.esq i.dir
+pos i .esq i.dir printa
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
