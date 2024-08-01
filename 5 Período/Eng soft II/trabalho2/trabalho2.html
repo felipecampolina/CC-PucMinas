@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Legend widget | Sample | ArcGIS Maps SDK for JavaScript 4.29</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+  </style>
+
+  <script src="https://js.arcgis.com/4.29/"></script>
+  <script>
+    require([
+      "esri/views/MapView",
+      "esri/widgets/Legend",
+      "esri/WebMap",
+      "esri/widgets/Sketch",
+      "esri/layers/GraphicsLayer",
+      "esri/widgets/CoordinateConversion",
+      "esri/Map",
+      "esri/widgets/Print",
+      "esri/widgets/Search",
+      "esri/widgets/LayerList"
+    ], (
+      MapView,
+      Legend,
+      WebMap,
+      Sketch,
+      GraphicsLayer,
+      CoordinateConversion,
+      Map,
+      Print,
+      Search,
+      LayerList
+    ) => {
+      const webmap = new WebMap({
+        portalItem: {
+          id: "aa8d0667bcba4d6d90643b8c315ad2bf" // Substitua pelo seu ID de WebMap
+        }
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: webmap
+      });
+
+      view.when(() => {
+        // Assume que as primeiras três camadas são as que você deseja trabalhar
+        const featureLayers = [
+          webmap.layers.getItemAt(0),
+          webmap.layers.getItemAt(1),
+          webmap.layers.getItemAt(2)
+        ];
+        const legendTitles = [
+          "Tipos de linha de ônibus - mostrado apenas MOVE devido ao SQL",
+          "Bairro escolas privadas",
+          "Bairro ensino superior"
+        ];
+
+        // Filtrar a primeira camada para mostrar apenas as linhas MOVE
+        featureLayers[0].definitionExpression = "SISTEMA_TR = 'MOVE'";
+        
+
+        const legend = new Legend({
+          view: view,
+          layerInfos: featureLayers.map((layer, index) => ({
+            layer: layer,
+            title: legendTitles[index] // Associa cada camada ao seu título específico
+          }))
+        });
+
+        const layerList = new LayerList({
+          view: view
+        });
+
+        // Widgets adicionais
+        const sketch = new Sketch({
+          view: view,
+          layer: new GraphicsLayer()
+        });
+
+        const ccWidget = new CoordinateConversion({
+          view: view
+        });
+
+        const print = new Print({
+          view: view,
+          printServiceUrl: "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+        });
+
+        const searchWidget = new Search({
+          view: view
+        });
+
+        // Adicionando widgets à UI
+        view.ui.add(legend, "bottom-right");
+        view.ui.add(sketch, "top-right");
+        view.ui.add(layerList, "top-right");
+        view.ui.add(ccWidget, "bottom-left");
+        view.ui.add(print, "top-left");
+        view.ui.add(searchWidget, "top-left");
+      });
+    });
+  </script>
+</head>
+<body class="calcite">
+  <div id="viewDiv"></div>
+</body>
+</html>

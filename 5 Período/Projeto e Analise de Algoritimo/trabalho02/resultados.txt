@@ -1,0 +1,142 @@
+Recursivo Ingênuo - Resultado: 92, Complexidade de Espaço: 10000 unidades
+DP com Memoization - Resultado: 92, Complexidade de Espaço: 10000 unidades
+Tai - Resultado: 92, Complexidade de Espaço: 10000 unidades
+Zhang-Shasha - Resultado: 92, Complexidade de Espaço: 10000 unidades
+Tamanho: 100 caracteres
+Recursivo Ingênuo: 419712600 ns / 419 ms / 0 s
+DP com Memoização: 10508700 ns / 10 ms / 0 s
+Tai: 3247000 ns / 3 ms / 0 s
+Zhang-Shasha: 0 ns / 0 ms / 0 s
+
+
+
+
+Recursivo Ingênuo - Resultado: 178, Complexidade de Espaço: 40000 unidades
+DP com Memoization - Resultado: 178, Complexidade de Espaço: 40000 unidades
+Tai - Resultado: 178, Complexidade de Espaço: 40000 unidades
+Zhang-Shasha - Resultado: 178, Complexidade de Espaço: 40000 unidades
+Tamanho: 200 caracteres
+Recursivo Ingênuo: 7894272500 ns / 7894 ms / 7 s
+DP com Memoização: 44134200 ns / 44 ms / 0 s
+Tai: 11542800 ns / 11 ms / 0 s
+Zhang-Shasha: 1011800 ns / 1 ms / 0 s
+
+
+
+
+
+
+
+
+
+Tamanho: 200 caracteres
+Recursivo Ingênuo (Média): 141212640 ns / 141 ms / 0 s
+Zhang-Shasha (Média): 218400 ns / 0 ms / 0 s
+Tai (Média): 16066270 ns / 16 ms / 0 s
+Tamanho: 400 caracteres
+Recursivo Ingênuo (Média): 1178434870 ns / 1178 ms / 1 s
+Zhang-Shasha (Média): 3127890 ns / 3 ms / 0 s
+Tai (Média): 41093500 ns / 41 ms / 0 s
+Tamanho: 600 caracteres
+Recursivo Ingênuo (Média): 4976210770 ns / 4976 ms / 4 s
+Zhang-Shasha (Média): 9992350 ns / 9 ms / 0 s
+Tai (Média): 119036940 ns / 119 ms / 0 s
+Tamanho: 800 caracteres
+Recursivo Ingênuo (Média): 12777847240 ns / 12777 ms / 12 s
+Zhang-Shasha (Média): 20537720 ns / 20 ms / 0 s
+Tai (Média): 237731260 ns / 237 ms / 0 s
+Tamanho: 1000 caracteres
+Recursivo Ingênuo (Média): 25899657090 ns / 25899 ms / 25 s
+Zhang-Shasha (Média): 28047650 ns / 28 ms / 0 s
+Tai (Média): 386900130 ns / 386 ms / 0 s
+
+
+
+Recursivo Ingênuo - Resultado: 269, Complexidade de Espaço: 90000 unidades
+DP com Memoization - Resultado: 269, Complexidade de Espaço: 90000 unidades
+Tai - Resultado: 269, Complexidade de Espaço: 90000 unidades
+Zhang-Shasha - Resultado: 269, Complexidade de Espaço: 90000 unidades
+Tamanho: 300 caracteres
+Recursivo Ingênuo: 52958850000 ns / 52958 ms / 52 s
+DP com Memoização: 101587500 ns / 101 ms / 0 s
+Tai: 25824200 ns / 25 ms / 0 s
+Zhang-Shasha: 2984100 ns / 2 ms / 0 s
+
+
+
+Recursivo Ingênuo - Resultado: 354, Complexidade de Espaço: 160000 unidades
+DP com Memoization - Resultado: 354, Complexidade de Espaço: 160000 unidades
+Tai - Resultado: 354, Complexidade de Espaço: 160000 unidades
+Zhang-Shasha - Resultado: 354, Complexidade de Espaço: 160000 unidades
+Tamanho: 400 caracteres
+Recursivo Ingênuo: 153130197400 ns / 153130 ms / 153 s
+DP com Memoização: 179786700 ns / 179 ms / 0 s
+Tai: 51061000 ns / 51 ms / 0 s
+Zhang-Shasha: 4640400 ns / 4 ms / 0 s
+
+
+Recursivo Ingênuo - Resultado: 445, Complexidade de Espaço: 250000 unidades
+DP com Memoization - Resultado: 445, Complexidade de Espaço: 250000 unidades
+Tai - Resultado: 445, Complexidade de Espaço: 250000 unidades
+Zhang-Shasha - Resultado: 445, Complexidade de Espaço: 250000 unidades
+Tamanho: 500 caracteres
+Recursivo Ingênuo: 325102491800 ns / 325102 ms / 325 s
+DP com Memoização: 312090700 ns / 312 ms / 0 s
+Tai: 74897600 ns / 74 ms / 0 s
+Zhang-Shasha: 5715000 ns / 5 ms / 0 s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tamanho: 200 caracteres
+Recursivo Ingênuo (Média): 141846220 ns / 141 ms / 0 s
+Zhang-Shasha (Média): 1527450 ns / 1 ms / 0 s
+Tai (Média): 10952980 ns / 10 ms / 0 s
+Tamanho: 400 caracteres
+Recursivo Ingênuo (Média): 1178515080 ns / 1178 ms / 1 s
+Zhang-Shasha (Média): 6712570 ns / 6 ms / 0 s
+Tai (Média): 40564530 ns / 40 ms / 0 s
+Tamanho: 600 caracteres
+Recursivo Ingênuo (Média): 5677745090 ns / 5677 ms / 5 s
+Zhang-Shasha (Média): 13949170 ns / 13 ms / 0 s
+Tai (Média): 158320670 ns / 158 ms / 0 s
+Tamanho: 800 caracteres
+Recursivo Ingênuo (Média): 12612442690 ns / 12612 ms / 12 s
+Zhang-Shasha (Média): 22074260 ns / 22 ms / 0 s
+Tai (Média): 233389480 ns / 233 ms / 0 s
+Tamanho: 1000 caracteres
+Recursivo Ingênuo (Média): 21629433620 ns / 21629 ms / 21 s
+Zhang-Shasha (Média): 33770070 ns / 33 ms / 0 s
+Tai (Média): 324435470 ns / 324 ms / 0 s
+Tamanho: 1200 caracteres
+Recursivo Ingênuo (Média): 37591089850 ns / 37591 ms / 37 s
+Zhang-Shasha (Média): 41927760 ns / 41 ms / 0 s
+Tai (Média): 472218030 ns / 472 ms / 0 s
+Tamanho: 1400 caracteres
+Recursivo Ingênuo (Média): 63086428330 ns / 63086 ms / 63 s
+Zhang-Shasha (Média): 50960460 ns / 50 ms / 0 s
+Tai (Média): 652910490 ns / 652 ms / 0 s
+Tamanho: 1600 caracteres
+Recursivo Ingênuo (Média): 85623165950 ns / 85623 ms / 85 s
+Zhang-Shasha (Média): 76300140 ns / 76 ms / 0 s
+Tai (Média): 858230380 ns / 858 ms / 0 s
+Tamanho: 1800 caracteres
+Recursivo Ingênuo (Média): 139436636500 ns / 139436 ms / 139 s
+Zhang-Shasha (Média): 105916800 ns / 105 ms / 0 s
+Tai (Média): 1120828620 ns / 1120 ms / 1 s
+Tamanho: 2000 caracteres
+Recursivo Ingênuo (Média): 213323387960 ns / 213323 ms / 213 s
+Zhang-Shasha (Média): 135425130 ns / 135 ms / 0 s
+Tai (Média): 1590700310 ns / 1590 ms / 1 s
+

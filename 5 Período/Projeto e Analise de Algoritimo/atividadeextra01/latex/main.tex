@@ -1,0 +1,316 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% How to use writeLaTeX: 
+%
+% You edit the source code here on the left, and the preview on the
+% right shows you the result within a few seconds.
+%
+% Bookmark this page and share the URL with your co-authors. They can
+% edit at the same time!
+%
+% You can upload figures, bibliographies, custom classes and
+% styles using the files menu.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{rotating}
+% \usepackage{biblatex}
+\usepackage{graphicx,url}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tabularx}
+
+%\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc}  
+
+     
+\sloppy
+
+\title{Atividade Extra 1 - Stable Matching}
+
+\author{Felipe Campolina Soares de Paula\inst{1}}
+
+
+\address{ICEI - Pontifícia Universidade Católica de Minas Gerais}
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{cite}
+
+\begin{document} 
+
+\maketitle
+\section{Introdução}
+
+O problema do \textit{Stable Matching} (ou \textit{Casamento Estável}) é uma questão clássica em teoria dos jogos e otimização, com amplas aplicações em diversos campos, incluindo economia, informática e teoria das escolhas \cite{gale:62}. Este problema visa encontrar uma correspondência estável entre dois conjuntos de elementos, onde uma correspondência é considerada estável se não houver dois elementos que prefeririam estar emparelhados um com o outro do que com seus parceiros atuais.
+
+Mais formalmente, dado dois conjuntos \( A \) e \( B \) de tamanho \( n \), e dadas as preferências de cada elemento de \( A \) e \( B \) sobre os elementos do outro conjunto, o objetivo é encontrar uma correspondência \( M \subseteq A \times B \) tal que cada elemento de \( A \) e de \( B \) é emparelhado exatamente uma vez, e a correspondência é estável. 
+
+Uma correspondência \( M \) é estável se não existir um par \((a, b) \notin M\) tal que \( a \) prefere \( b \) a seu parceiro atual em \( M \) e \( b \) prefere \( a \) a seu parceiro atual em \( M \). Em termos matemáticos, para todo \( (a, b) \notin M \):
+\[
+\text{Se } a \text{ prefere } b \text{ a } M(a) \text{ e } b \text{ prefere } a \text{ a } M(b), \text{ então } M \text{ é instável}.
+\]
+
+Para resolver este problema, David Gale e Lloyd Shapley propuseram em 1962 o algoritmo conhecido como \textit{Gale-Shapley algorithm} ou algoritmo dos \textit{Proposals and Rejections}. Este algoritmo garante a existência de uma correspondência estável para qualquer conjunto de preferências. O processo inicia com todos os elementos de um conjunto (por exemplo, \( A \)) propondo-se aos seus parceiros preferidos no outro conjunto (\( B \)). Cada elemento de \( B \) avalia as propostas recebidas, aceita a melhor e rejeita as demais. Os elementos rejeitados de \( A \) continuam propondo-se a suas próximas preferências até que todos estejam emparelhados de forma estável.
+
+A estrutura deste texto está organizada da seguinte forma: na Seção 2, discutimos em detalhes o princípio do \textit{Stable Matching} e conceitos fundamentais para essa discussão. Na Seção 3, fornecemos um exemplo ilustrativo do funcionamento do algoritmo de Gale-Shapley. Na Seção 4, exploramos algumas das principais aplicações práticas deste algoritmo. Finalmente, na Seção 5, analisamos o custo computacional do algoritmo e discutimos suas implicações para problemas de grande escala.
+
+
+
+\section{Princípios e Conceitos}
+
+
+Para formular a questão, podemos imaginar um grupo de estudantes de ciências da computação que estão se candidatando a estágios de verão em várias empresas. Cada candidato tem uma ordem de preferência em relação às empresas, e cada empresa, após receber as candidaturas, forma uma ordem de preferência em relação aos candidatos.
+
+Gale e Shapley consideraram os problemas que poderiam surgir nesse processo na ausência de um mecanismo que mantivesse o status quo. Por exemplo, se um candidato aceitar uma oferta de uma empresa, mas depois receber uma oferta de uma empresa que prefere mais, ele pode rescindir a primeira oferta, causando um efeito dominó de rejeições e novas ofertas.
+
+Para resolver isso, Gale e Shapley desenvolveram o algoritmo dos \textit{Proposals and Rejections}, que funciona da seguinte maneira:
+
+\begin{enumerate}
+    \item \textbf{Inicialização}: Todos os elementos de um conjunto (por exemplo, \( A \)) começam sem pares.
+    \item \textbf{Proposta}: Cada elemento de \( A \) tenta formar um parte ao elemento mais preferido de \( B \) que ainda não o rejeitou.
+    \item \textbf{Avaliação}: Cada elemento de \( B \) considera todas as propostas recebidas e mantém a melhor proposta (de acordo com suas preferências), rejeitando as outras.
+    \item \textbf{Iteração}: Os elementos rejeitados de \( A \) continuam propondo-se a seus próximos preferidos em \( B \) até que todos os elementos estejam emparelhados de forma estável.
+\end{enumerate}
+
+O algoritmo garante que uma correspondência estável será sempre encontrada, independentemente das preferências individuais dos participantes. A estabilidade aqui significa que não haverá dois elementos que prefeririam estar juntos do que com seus parceiros atuais, evitando assim qualquer incentivo para mudanças nos pares formados.
+
+\subsection{Conceitos Fundamentais}
+\begin{enumerate}
+    \item \textbf{Casamento Perfeito (Perfect Matching)}: 
+    Um casamento perfeito ocorre quando todos os participantes estão emparelhados monogamicamente. Em termos mais específicos, cada homem é emparelhado com exatamente uma mulher e cada mulher é emparelhada com exatamente um homem. No contexto dos estudantes de Ciência da Computação e estágios, isso significa que cada estudante recebe exatamente uma oferta de estágio e cada empresa contrata exatamente um estagiário.
+
+    \item \textbf{Estabilidade (Stability)}: 
+    Estabilidade significa que não há incentivo para que algum par de participantes interfira no emparelhamento atual agindo conjuntamente. Formalmente, em um emparelhamento \( M \), um par não emparelhado \( (m, w) \) é instável se o homem \( m \) e a mulher \( w \) preferem estar um com o outro do que com seus parceiros atuais. Por exemplo, se um estudante preferir uma empresa àquela para a qual foi designado e essa empresa também preferir esse estudante ao seu estagiário atual, eles têm um incentivo para formar um novo par, o que torna a situação instável.
+
+    \item \textbf{Casamento Estável (Stable Matching)}:
+    Um casamento estável é um casamento perfeito onde não há pares instáveis. Isso garante que nenhum estudante e nenhuma empresa prefeririam estar emparelhados um com o outro em vez de com seus parceiros designados.
+
+    \item \textbf{Problema do Casamento Estável (Stable Matching Problem)}:
+    Dado um conjunto de listas de preferências de \( n \) homens e \( n \) mulheres, ou, no contexto dos estágios, \( n \) estudantes e \( n \) empresas, o objetivo é encontrar um casamento estável se ele existir. Isso significa encontrar uma maneira de emparelhar todos os estudantes com empresas de forma que nenhum estudante e nenhuma empresa prefiram mudar sua correspondência.
+\end{enumerate}
+
+Estes conceitos fundamentais são essenciais para entender o problema do \textit{Stable Matching} e suas aplicações práticas. Eles ajudam a garantir que o processo de emparelhamento seja auto-regulável e estável, evitando caos e insatisfação entre os participantes.
+
+
+\section{Funcionamento e Exemplo}
+
+O problema do \textit{Stable Matching} tem várias aplicações práticas em diferentes contextos. Uma aplicação interessante é no processo de alocação de alunos de Ciência da Computação da PUC Minas a orientadores de TCC. Neste cenário, cada aluno tem suas próprias preferências em relação aos professores, e cada professor tem suas próprias especialidades e limites de orientação.
+
+
+
+\subsection{ Exemplo Fictício: Alocação de Alunos de Ciência da Computação a Orientadores de TCC}
+
+Imagine um grupo de alunos de Ciência da Computação da PUC Minas que precisam escolher orientadores de TCC entre um grupo de professores, como Max, Silvio, Wallison, Henrique, entre outros. Cada aluno tem interesses específicos em áreas como Inteligência Artificial, Redes de Computadores, Sistemas Distribuídos e Desenvolvimento de Software. Da mesma forma, cada professor tem especialidades nessas áreas e pode orientar um número limitado de alunos.
+
+
+Cada aluno cria uma lista de preferências com base nas áreas de especialidade dos professores e na sua afinidade pessoal. Por exemplo, o aluno A1 pode preferir o professor Max em primeiro lugar, seguido pelo professor Henrique, enquanto o aluno A2 pode preferir o professor Silvio e depois o professor Wallison.
+
+Os professores, por sua vez, também criam listas de preferências com base nos interesses dos alunos e no potencial de pesquisa que cada aluno apresenta. Por exemplo, o professor Max pode preferir orientar o aluno A1, seguido pelo aluno A3, enquanto o professor Henrique pode preferir o aluno A2 e depois o aluno A4.
+
+\subsection{Funcionamento}
+
+Utilizando o algoritmo de Gale-Shapley, o processo de alocação segue os seguintes passos:
+
+1. \textbf{Inicialização}: Todos os alunos e professores começam sem par.
+
+2. \textbf{Proposta}: Cada aluno propõe-se ao professor mais preferido de sua lista que ainda não o rejeitou.
+
+3. \textbf{Avaliação}: Cada professor considera todas as propostas recebidas e mantém as melhores propostas (de acordo com suas preferências e limites de orientação), rejeitando as outras.
+
+4. \textbf{Iteração}: Os alunos rejeitados continuam propondo-se aos próximos preferidos em suas listas até que todos os alunos estejam emparelhados de forma estável.
+\newpage
+
+\section*{Preferências de Alunos}
+
+\noindent\begin{tabularx}{\textwidth}{|X|X|X|X|}
+\hline
+ & \text{1ª Preferência} & \text{2ª Preferência} & \text{3ª Preferência} \\
+\hline
+\text{A1} & \text{Max} & \text{Henrique} & \text{Silvio} \\
+\hline
+\text{A2} & \text{Silvio} & \text{Wallison} & \text{Henrique} \\
+\hline
+\text{A3} & \text{Max} & \text{Wallison} & \text{Henrique} \\
+\hline
+\text{A4} & \text{Henrique} & \text{Max} & \text{Silvio} \\
+\hline
+\end{tabularx}
+
+\section*{Preferências de Professores}
+
+\noindent\begin{tabularx}{\textwidth}{|X|X|X|X|}
+\hline
+ & \text{1ª Preferência} & \text{2ª Preferência} & \text{3ª Preferência} \\
+\hline
+\text{Max} & \text{A1} & \text{A3} & \text{A4} \\
+\hline
+\text{Silvio} & \text{A2} & \text{A1} & \\
+\hline
+\text{Wallison} & \text{A3} & \text{A2} & \\
+\hline
+\text{Henrique} & \text{A4} & \text{A2} & \text{A1} \\
+\hline
+\end{tabularx}
+
+
+
+O algoritmo inicia com todos os alunos sem orientação. Após isso , cada aluno propõe-se ao seu professor mais preferido, resultando na imagem abaixo :
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[node distance=0.7cm and 2cm,>=stealth',thick,main node/.style={circle,draw,font=\small\bfseries,minimum size=2cm}]
+        % Alunos
+        \node[main node] (A1) {A1};
+        \node[main node, below=of A1] (A2) {A2};
+        \node[main node, below=of A2] (A3) {A3};
+        \node[main node, below=of A3] (A4) {A4};
+        % Professores
+        \node[main node, right=of A2] (Max) {Max};
+        \node[main node,  right=of A1] (Silvio) {Silvio};
+        \node[main node, right=of A3] (Henrique) {Henrique};
+        \node[main node, right=of A4] (Wallison) {Wallison};
+        % Setas
+        \draw[->] (A1) -- (Max);
+        \draw[->] (A2) -- (Silvio);
+        \draw[->] (A3) -- (Max);
+        \draw[->] (A4) -- (Henrique);
+        \draw[->] (Max) -- (A1);
+        \draw[->] (Silvio) -- (A2);
+        \draw[->] (Max) -- (A3);
+        \draw[->] (Henrique) -- (A4);
+    \end{tikzpicture}
+    \caption{Propostas Iniciais}
+\end{figure}
+\newpage
+
+Logo após , o Max, recebendo propostas de A1 e A3, prefere manter A1 e rejeita A3. Silvio aceita A2. Henrique aceita A4. A3, rejeitado por Max, propõe-se a Wallison, que aceita A3. Ficando igual a figura abaixo:
+
+\begin{figure}[htbp]
+    \centering
+     \begin{tikzpicture}[node distance=0.7cm and 2cm,>=stealth',thick,main node/.style={circle,draw,font=\small\bfseries,minimum size=2cm}]
+        % Alunos
+        \node[main node] (A1) {A1};
+        \node[main node, below=of A1] (A2) {A2};
+        \node[main node, below=of A2] (A3) {A3};
+        \node[main node, below=of A3] (A4) {A4};
+        % Professores
+        \node[main node, right=of A2] (Max) {Max};
+        \node[main node,  right=of A1] (Silvio) {Silvio};
+        \node[main node, right=of A3] (Wallison) {Wallison};
+        \node[main node, right=of A4] (Henrique) {Henrique};
+        % Setas
+        \draw[->] (A1) -- (Max);
+        \draw[->] (A2) -- (Silvio);
+        \draw[->] (A3) -- (Wallison);
+        \draw[->] (A4) -- (Henrique);
+        \draw[->] (Max) -- (A1);
+        \draw[->] (Silvio) -- (A2);
+        \draw[->] (Wallison) -- (A3);
+        \draw[->] (Henrique) -- (A4);
+    \end{tikzpicture}
+    \caption{Após Algortímo }
+\end{figure}
+
+Este emparelhamento é estável porque nenhum aluno e professor preferem estar emparelhados com outra pessoa ao invés do seu par atual.
+
+Este exemplo ilustra como o algoritmo de Gale-Shapley pode ser utilizado para resolver problemas de alocação de recursos de maneira estável e eficiente, garantindo que as preferências de todos os participantes sejam consideradas.
+
+
+\newpage
+\subsection{Algoritmo de Alocação de Alunos a Orientadores de TCC}
+Segue abaixo o pseudo código do exemplo: 
+
+\textbf{Entrada:} Lista de preferências dos alunos, Lista de preferências dos professores
+
+
+\textbf{Saída:} Pareamentos entre alunos e orientadores de TCC
+
+\begin{algorithm}
+\caption{Alocação de Alunos a Orientadores de TCC}
+\begin{algorithmic}[1]
+\State Inicialize todos os alunos e professores como livres.
+\While{existir um aluno livre $A$ que ainda não propôs a todos os seus professores preferidos}
+\State Selecione o professor $P$ que é a próxima preferência de $A$ e ainda não foi proposto por $A$.
+\If{$P$ estiver livre}
+\State $A$ e $P$ tornam-se pareados.
+\Else
+\State Se $P$ já estiver pareado com outro aluno $A'$
+\If{$P$ prefere $A$ a $A'$}
+\State $A$ e $P$ tornam-se pareados.
+\State $A'$ torna-se livre.
+\Else
+\State $A'$ e $P$ permanecem pareados.
+\EndIf
+\EndIf
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+Este algoritmo recebe como entrada as listas de preferências dos alunos e dos professores e retorna os pareamentos entre os alunos e os orientadores de TCC. Ele assegura que cada aluno seja pareado com um orientador de acordo com suas preferências, considerando também as preferências dos orientadores.
+
+\section{Aplicações}
+
+O problema do \textit{Stable Matching} tem várias aplicações práticas em diferentes contextos. Abaixo são apresentados alguns exemplos conhecidos na literatura:
+
+\subsection{National Resident Matching Program (NRMP)}
+
+Uma das aplicações mais notáveis do algoritmo de Gale-Shapley é o National Resident Matching Program (NRMP) nos Estados Unidos, que emparelha médicos residentes com hospitais. Este programa utiliza um algoritmo baseado em \textit{Stable Matching} para garantir que os médicos e os hospitais sejam emparelhados de maneira estável, evitando conflitos e insatisfações \cite{roth:90}.
+
+\subsection{Alocação de Estudantes a Escolas}
+
+Outra aplicação importante do \textit{Stable Matching} é a alocação de estudantes a escolas. Em várias cidades ao redor do mundo, os sistemas escolares utilizam algoritmos de \textit{Stable Matching} para emparelhar estudantes com escolas com base nas preferências dos estudantes e nas prioridades das escolas. Este método ajuda a garantir que o processo de alocação seja justo e eficiente \cite{abdulkadirouglu2003school}.
+
+\subsection{Mercados de Trabalho}
+
+Alguns mercados de trabalho também se beneficiam do algoritmo de Gale-Shapley. Em certos setores, as empresas e os candidatos a emprego são emparelhados utilizando princípios de \textit{Stable Matching} para assegurar que os candidatos sejam colocados em empresas que correspondam às suas preferências e qualificações, e vice-versa \cite{hatfield2005matching}.
+
+\subsection{Doação de Órgãos}
+
+O \textit{Stable Matching} também é utilizado em sistemas de doação de órgãos. Algoritmos de correspondência estável ajudam a emparelhar doadores de órgãos com receptores de forma eficiente e justa, levando em consideração fatores como compatibilidade médica e urgência do caso \cite{roth2005kidney}.
+
+\subsection{Sistemas de Recomendação}
+
+Em sistemas de recomendação, como os utilizados por plataformas de streaming e de e-commerce, o \textit{Stable Matching} pode ser usado para emparelhar usuários com conteúdos ou produtos que atendam melhor às suas preferências. Este tipo de aplicação melhora a experiência do usuário, oferecendo recomendações personalizadas \cite{deshpande2004item}.
+
+Estes exemplos ilustram a versatilidade e a importância do \textit{Stable Matching} em uma ampla gama de aplicações práticas, demonstrando como os princípios teóricos podem ser aplicados para resolver problemas reais de maneira eficiente e justa.
+
+\section{Custo e Complexidade Computacional}
+
+O algoritmo de Gale-Shapley, utilizado para resolver o problema de \textit{Stable Matching}, é notável não apenas pela sua eficácia, mas também pela sua eficiência computacional. A seguir, discutimos a complexidade do algoritmo e algumas de suas variantes, bem como seus custos computacionais.
+
+\subsection{Complexidade do Algoritmo de Gale-Shapley}
+
+O algoritmo original de Gale-Shapley tem uma complexidade de tempo de \(O(n^2)\), onde \(n\) é o número de elementos em cada conjunto. Esta complexidade surge do fato de que, no pior caso, cada participante pode fazer uma proposta a cada outro participante uma vez, resultando em \(n \times n = n^2\) operações \cite{gale:62}. A complexidade de espaço do algoritmo também é \(O(n^2)\), pois é necessário armazenar as listas de preferências e o estado das propostas.
+
+\subsection{Otimizações e Variantes do Algoritmo}
+
+Várias otimizações e variantes do algoritmo de Gale-Shapley foram propostas para lidar com situações específicas e melhorar a eficiência em certos contextos:
+
+\begin{enumerate}
+    \item \textbf{Matching com Restrições}: Em certos casos, como no emparelhamento de doadores e receptores de órgãos, é necessário considerar restrições adicionais (como compatibilidade médica). Algoritmos especializados, como o de Roth et al. (2005), foram desenvolvidos para lidar com essas restrições, mantendo a complexidade computacional administrável \cite{roth2005kidney}. Esses algoritmos frequentemente utilizam técnicas de programação inteira e combinatória para incorporar restrições adicionais.
+    
+    \item \textbf{Emparelhamento com Contratos}: Quando os emparelhamentos envolvem contratos com múltiplos atributos, a complexidade pode aumentar. Hatfield e Milgrom (2005) propuseram um algoritmo eficiente para o emparelhamento com contratos, que lida com contratos multi-atributo e mantém a estabilidade. A complexidade pode aumentar para \(O(n^3)\) em alguns casos devido à necessidade de considerar as diferentes combinações de contratos possíveis \cite{hatfield2005matching}. Este algoritmo expande o modelo tradicional de \textit{Stable Matching} para incluir dimensões adicionais de decisão.
+    
+    \item \textbf{Algoritmos Aproximados}: Para problemas de grande escala, onde a complexidade quadrática pode ser impraticável, algoritmos aproximados que encontram emparelhamentos quase estáveis em tempo subquadrático foram desenvolvidos. Por exemplo, Deshpande e Karypis (2004) desenvolveram algoritmos baseados em técnicas de aprendizado de máquina e heurísticas que podem encontrar soluções aproximadas mais rapidamente \cite{deshpande2004item}. Esses algoritmos são úteis em aplicações como sistemas de recomendação, onde a velocidade de resposta é crucial.
+\end{enumerate}
+
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}
+
+
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}

@@ -1,0 +1,1023 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+\usepackage{amsmath} 
+\usepackage{graphicx,url}
+\usepackage{algorithmic}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{algorithm}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{tabularx}
+\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc}  
+\usepackage{authblk}
+
+\usepackage{pgfplots}
+\usepackage{multicol}
+\sloppy
+
+\title{Assignment 1: Distância de edição de árvore}
+
+\author{Camila Lopes, Felipe Campolina, Henrique Diniz, Leandro Guido, Marcelo Augusto, Victor Colen\inst{1}}
+\address{Pontifícia Universidade Católica de Minas Gerais (PUC-MG)}
+
+\author{
+Camila Lopes, Felipe Campolina, Henrique Diniz, Leandro Guido, Marcelo Augusto, Victor Colen \\
+Instituto de Ciências Exatas e Informática -- Pontifícia Universidade Católica de Minas Gerais \\
+\{camila.lopes, felipe.campolina, henrique.diniz, leandro.guido, marcelo.augusto, victor.costa\}@pucminas.br
+}
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This article explores the edit distance between trees, an essential metric for quantifying structural similarity between two trees. We analyze three main algorithms: the naive recursive algorithm, Tai's algorithm, and the Zhang-Shasha algorithm. Detailed implementations and empirical tests are presented to evaluate the efficacy and efficiency of each approach. The results show that, while the naive recursive algorithm has exponential growth in execution time, the Tai and Zhang-Shasha algorithms perform significantly better, making them more suitable for practical applications. Applications in bioinformatics, computational linguistics, and image analysis are discussed.
+\end{abstract}
+
+\begin{resumo}
+Este artigo explora a distância de edição entre árvores, uma métrica essencial para quantificar a similaridade estrutural entre duas árvores. Analisamos três algoritmos principais: o algoritmo recursivo ingênuo, o algoritmo de Tai e o algoritmo de Zhang-Shasha. Implementações detalhadas e testes empíricos são apresentados para avaliar a eficácia e a eficiência de cada abordagem. Os resultados mostram que, enquanto o algoritmo recursivo ingênuo tem crescimento exponencial no tempo de execução, os algoritmos de Tai e Zhang-Shasha apresentam desempenho significativamente melhor, sendo mais adequados para aplicações práticas. Aplicações em bioinformática, linguística computacional e análise de imagens são discutidas.
+\end{resumo}
+
+     
+\section{Introdução}
+A distância de edição entre árvores é uma medida que quantifica o mínimo custo de operações necessárias para transformar uma árvore \( T1 \) em outra árvore \( T2 \). As operações permitidas geralmente incluem inserções, deleções e substituições de nós. Este problema tem aplicações significativas em áreas como bioinformática, onde é usado para comparar estruturas de RNA, e em linguística computacional, onde auxilia na correção de erros sintáticos.
+
+O algoritmo recursivo ingênuo é a abordagem mais simples e direta para calcular a distância de edição, utilizando chamadas recursivas para explorar todas as possibilidades de edição. No entanto, devido à sua complexidade exponencial, este método é computacionalmente inviável para árvores grandes. Esta abordagem tem uma complexidade temporal de \( O(3^n) \), onde \( n \) é o número total de nós nas árvores, tornando-se impraticável para árvores de tamanhos moderados a grandes.
+
+Tai \cite{tai1979tree} propôs um algoritmo eficiente que resolve o problema em tempo polinomial \( O(V \cdot V' \cdot L^2 \cdot L'^2) \), onde \( V \) e \( V' \) são os números de nós nas árvores \( T1 \) e \( T2 \), respectivamente, e \( L \) e \( L' \) são as profundidades máximas das árvores \( T1 \) e \( T2 \). Este algoritmo utiliza uma técnica de mapeamento que transforma uma árvore em outra por meio de uma série de operações de edição, minimizando o custo total.
+
+Zhang e Shasha \cite{zhang1989simple} apresentaram um algoritmo com complexidade \( O(\min\{n_{\text{height}}, n_{\text{leaves}}\} \cdot \min\{m_{\text{height}}, m_{\text{leaves}}\} \cdot nm) \), onde \( n_{\text{height}} \) e \( n_{\text{leaves}} \) são a altura e o número de folhas em \( T1 \), e \( m_{\text{height}} \) e \( m_{\text{leaves}} \) são a altura e o número de folhas em \( T2 \). Se as árvores forem balanceadas, a complexidade se torna \( O((n \log n) (m \log m)) \), onde \( n \) e \( m \) são o número de nós em \( T1 \) e \( T2 \), respectivamente. Este método é amplamente reconhecido por sua eficiência e simplicidade na implementação.
+
+Neste trabalho, as abordagens mencionadas são implementadas e testadas empiricamente para avaliar seu desempenho em termos de complexidade temporal e espacial. Os resultados dos testes comparativos são apresentados nas seções seguintes, onde cada algoritmo é detalhado e suas complexidades são discutidas.
+
+\section{Responsabilidades do Grupo}
+\begin{table}[h!]
+\centering
+\caption{Responsabilidades dos membros do grupo}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
+    \hline
+    \textbf{Membro do Grupo} & \textbf{Responsabilidades} \\
+    \hline
+    Camila Lopes & Implementação do algoritmo recursivo ingênuo e redação das seções de introdução e conclusão. \\
+    \hline
+    Felipe Campolina & Implementação do algoritmo de Tai e elaboração dos testes empíricos. \\
+    \hline
+    Henrique Diniz & Implementação do algoritmo de Tai e análise de resultados. \\
+    \hline
+    Leandro Guido & Implementação do algoritmo de Zhang-Shasha e revisão bibliográfica. \\
+    \hline
+    Marcelo Augusto & Implementação do algoritmo de Zhang-Shasha e geração de dados de teste. \\
+    \hline
+    Victor Colen & Coordenação geral do projeto e revisão final do texto. \\
+    \hline
+\end{tabularx}
+\end{table}
+
+
+\section{Princípios e Conceitos Fundamentais}
+
+Nesta seção, são apresentados os princípios e conceitos fundamentais necessários para a compreensão da distância de edição entre árvores. Esses conceitos incluem árvores, distância de edição, operações de edição, e aplicações práticas.
+
+\subsection{Árvores}
+
+Uma árvore é uma estrutura de dados hierárquica composta por nós (ou vértices) conectados por arestas (ou ramos). A árvore possui as seguintes propriedades:
+\begin{itemize}
+    \item \textbf{Raiz:} O nó principal da árvore, de onde todos os outros nós descendem.
+    \item \textbf{Nós Internos:} Nós que possuem pelo menos um filho.
+    \item \textbf{Folhas:} Nós que não possuem filhos.
+    \item \textbf{Subárvore:} Qualquer nó e todos os seus descendentes formam uma subárvore.
+\end{itemize}
+Cada nó em uma árvore pode ter zero ou mais filhos, e a árvore não contém ciclos, ou seja, não há caminho que comece e termine no mesmo nó \cite{cormen2009introduction}.
+
+Formalmente, uma árvore $T$ é um grafo acíclico conectado, definido como um par ordenado $T = (V, E)$, onde $V$ é o conjunto de vértices (nós) e $E$ é o conjunto de arestas (ramos) \cite{knuth1997art}.
+
+\subsection{Distância de Edição}
+
+A distância de edição entre duas árvores \( T_1 \) e \( T_2 \) é uma medida que quantifica o custo mínimo necessário para transformar \( T_1 \) em \( T_2 \) por meio de uma série de operações de edição. Esta métrica é utilizada para comparar a similaridade estrutural entre duas árvores \cite{zhang1989simple}.
+
+\subsection{Operações de Edição}
+
+As operações de edição permitem transformar uma árvore em outra e são definidas como:
+\begin{itemize}
+    \item \textbf{Inserção de Nó:} Adicionar um novo nó em uma posição específica da árvore.
+    \item \textbf{Deleção de Nó:} Remover um nó existente e conectar seus filhos diretamente ao nó pai.
+    \item \textbf{Substituição de Nó:} Alterar o rótulo ou valor de um nó existente.
+\end{itemize}
+Cada uma dessas operações tem um custo associado, e o objetivo é encontrar a sequência de operações com o menor custo total para transformar uma árvore na outra \cite{tai1979tree}.
+
+\subsection{Aplicações Práticas}
+
+A distância de edição entre árvores possui diversas aplicações práticas em diferentes campos:
+\begin{itemize}
+    \item \textbf{Bioinformática:} Utilizada na comparação de estruturas de RNA, onde as árvores representam a estrutura secundária das moléculas de RNA \cite{shapiro1988comparative}.
+    \item \textbf{Linguística Computacional:} Auxilia na correção de erros sintáticos em árvores de análise gramatical \cite{joshi1987tree}.
+    \item \textbf{Análise de Imagens:} Empregada na comparação de hierarquias de partições em imagens para detectar semelhanças e diferenças estruturais \cite{martin2001database}.
+\end{itemize}
+Essas aplicações demonstram a relevância da distância de edição entre árvores na resolução de problemas complexos em diversas áreas científicas e tecnológicas.
+
+\subsection{Princípio dos Algoritmos}
+
+Os algoritmos para calcular a distância de edição entre árvores são baseados em princípios fundamentais que guiam o processo de transformação de uma árvore \( T_1 \) em outra árvore \( T_2 \). A seguir, são discutidos os principais princípios que fundamentam esses algoritmos.
+
+\subsubsection{Abordagem Recursiva}
+
+O princípio básico por trás dos algoritmos de distância de edição é a decomposição recursiva do problema. A abordagem recursiva divide o problema original em subproblemas menores, calculando a distância de edição para subárvores de \( T_1 \) e \( T_2 \). Essa abordagem permite explorar todas as possíveis operações de edição, embora possa ser computacionalmente intensiva \cite{zhang1989simple}.
+
+\subsubsection{Programação Dinâmica}
+
+Para superar a ineficiência da abordagem recursiva ingênua, utiliza-se a programação dinâmica. Este princípio envolve o armazenamento de resultados de subproblemas em uma tabela (ou matriz), evitando cálculos redundantes. A programação dinâmica permite construir a solução ótima para o problema original a partir das soluções ótimas dos subproblemas \cite{cormen2009introduction}.
+
+\subsubsection{Memoization}
+
+Memoization é uma técnica utilizada em programação dinâmica para otimizar algoritmos recursivos. Consiste em armazenar os resultados de subproblemas já calculados, de forma que, quando esses subproblemas forem novamente encontrados, seus resultados possam ser diretamente reutilizados sem a necessidade de novo cálculo.
+
+A importância do memoization é evidente na redução do tempo de execução de algoritmos recursivos. Sem essa técnica, um algoritmo pode recalcular a mesma solução várias vezes, resultando em uma complexidade exponencial. Com o memoization, cada subproblema é resolvido apenas uma vez, reduzindo a complexidade para um tempo polinomial \cite{ahuja1993network}.
+
+
+\section{Funcionamento dos algorítimos}
+Nessa seção, o artigo apresenta o funcionamento básico de cada um dos algoritmos implemnetados.
+
+\subsection{Recursivo Ingênuo para Distância de Edição entre Árvores}
+
+O algoritmo de recursão ingênua para calcular a distância de edição entre duas árvores é inspirado na abordagem de distância de edição entre strings. A ideia é processar os nós das árvores um a um, começando pelas folhas até a raiz. Existem duas possibilidades para cada par de nós sendo processados: ou eles correspondem ou não correspondem. Se os últimos nós de ambas as árvores corresponderem, não há necessidade de realizar nenhuma operação. Caso contrário, podemos realizar todas as três operações de edição: inserção, substituição e remoção. Calculamos recursivamente o resultado para o restante das subárvores e, ao final, selecionamos a menor resposta.
+
+A seguir, apresentamos a árvore recursiva para este problema:
+
+
+
+\subsubsection{Relações de Recorrência para a Distância de Edição}
+A função \texttt{edit\_distance} calcula a distância de edição entre duas strings, \texttt{str1} e \texttt{str2}, usando uma abordagem recursiva. Os parâmetros de entrada são as strings \texttt{str1} e \texttt{str2}, e os índices \texttt{M} e \texttt{N} que representam as posições atuais nas strings.
+
+\subsection*{Parâmetros de Entrada}
+\begin{itemize}
+    \item \texttt{str1}: Primeira string
+    \item \texttt{str2}: Segunda string
+    \item \texttt{M}: Índice atual na string \texttt{str1}
+    \item \texttt{N}: Índice atual na string \texttt{str2}
+\end{itemize}
+
+
+\[
+\small
+\text{edit\_distance} = 
+\begin{cases} 
+    \text{edit\_distance}(str1, str2, M-1, N-1) & \text{se } str1[M] = str2[N] \\
+    $1 + \min \begin{cases}
+    \text{edit\_distance}(str1, str2, M-1, N-1), \\
+    \text{edit\_distance}(str1, str2, M, N-1), \\
+    \text{edit\_distance}(str1, str2, M-1, N)
+\end{cases}$ & \text{caso contrário}
+\end{cases}
+\normalsize
+\]
+
+\subsubsection{Casos Base para a Distância de Edição}
+
+\begin{itemize}
+    \item Quando \( T1 \) se torna vazio, ou seja, \( M = 0 \), retornamos \( N \), pois são necessários \( N \) nós para converter uma árvore vazia em \( T2 \).
+    \item Quando \( T2 \) se torna vazio, ou seja, \( N = 0 \), retornamos \( M \), pois são necessários \( M \) nós para converter uma árvore vazia em \( T1 \).
+\end{itemize}
+
+\subsubsection{Passo a Passo do Algoritmo Recursivo Ingênuo}
+
+O algoritmo recursivo ingênuo para calcular a distância de edição entre duas árvores segue os seguintes passos:
+
+\begin{enumerate}
+    \item \textbf{Verificar se uma das árvores está vazia}: Se uma das árvores estiver vazia, a distância de edição será igual ao número de nós da outra árvore, pois é necessário inserir todos os nós da árvore não vazia na árvore vazia.
+    \item \textbf{Comparar os últimos nós das duas árvores}: Se os últimos nós das duas árvores forem iguais, a distância de edição para esses nós será a mesma que a distância de edição das subárvores restantes.
+    \item \textbf{Calcular a distância de edição para os três casos possíveis quando os últimos nós são diferentes}: 
+    \begin{itemize}
+        \item Inserir: Calcular a distância de edição após inserir o nó no final da segunda árvore.
+        \item Remover: Calcular a distância de edição após remover o nó do final da primeira árvore.
+        \item Substituir: Calcular a distância de edição após substituir o nó do final da primeira árvore pelo nó do final da segunda árvore.
+    \end{itemize}
+    \item \textbf{Retornar a menor distância de edição}: Selecionar a menor distância de edição entre as três opções calculadas no passo anterior.
+\end{enumerate}
+
+Abaixo está o pseudo-código do algoritmo:
+
+\begin{algorithm}[H]
+\caption{Distância de Edição Recursiva Ingênua}
+\KwIn{Árvores $T1$, $T2$ e tamanhos $m$, $n$}
+\KwOut{Distância de edição entre $T1$ e $T2$}
+\SetKwFunction{editDist}{editDist}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\editDist{$T1, T2, m, n$}}{
+    \If{$m == 0$}{
+        \Return{$n$}\;
+    }
+    \If{$n == 0$}{
+        \Return{$m$}\;
+    }
+    \If{$T1[m-1] == T2[n-1]$}{
+        \Return{\editDist{$T1, T2, m-1, n-1$}}\;
+    }
+    \Return{$1 + \min \begin{cases}
+    \editDist{T1, T2, m, n-1}, \\
+    \editDist{T1, T2, m-1, n}, \\
+    \editDist{T1, T2, m-1, n-1}
+\end{cases}$}\;
+}
+\end{algorithm}
+
+
+
+\subsubsection{Complexidade de Tempo e Espaço}
+
+\paragraph{Complexidade de Tempo}
+
+A complexidade de tempo do algoritmo recursivo ingênuo é exponencial. Para cada par de nós comparados, o algoritmo faz três chamadas recursivas, resultando em uma árvore de chamadas de profundidade $m+n$. Portanto, a complexidade de tempo é:
+
+\[
+O(3^{\max(m, n)})
+\]
+
+onde $m$ é o número de nós na árvore $T1$ e $n$ é o número de nós na árvore $T2$. Isso ocorre porque em cada passo, o algoritmo explora três possíveis caminhos (inserir, remover, substituir).
+
+\paragraph{Complexidade de Espaço}
+
+A complexidade de espaço do algoritmo é determinada pela profundidade da pilha de chamadas recursivas. No pior caso, a profundidade da recursão é igual ao número máximo de nós em uma das árvores. Portanto, a complexidade de espaço é:
+
+\[
+O(\max(m, n))
+\]
+
+No entanto, como o algoritmo utiliza apenas um número constante de variáveis locais e não aloca espaço adicional além da pilha de chamadas, a complexidade espacial é linear em relação ao comprimento das árvores.
+
+
+\subsection{Algoritmo de Tai para Distância de Edição entre Árvores}
+
+O problema de correção de árvore para árvore é determinar, para duas árvores ordenadas e rotuladas \( T \) e \( T' \), a distância de \( T \) para \( T' \) medida pela sequência de operações de edição de custo mínimo necessárias para transformar \( T \) em \( T' \). As operações de edição investigadas permitem mudar um nó de uma árvore para outro nó, deletar um nó de uma árvore ou inserir um nó em uma árvore. Um algoritmo é apresentado que resolve este problema em tempo polinomial.
+
+\subsubsection{Relações de Recorrência para a Correção de Árvores}
+
+\[
+\small
+\text{edit\_distance}(T, T', M, N) = 
+\begin{cases} 
+    \text{edit\_distance}(T, T', M-1, N-1) & \text{se os nós correspondem} \\
+    1 + \min \begin{cases}
+\text{edit\_distance}(T, T', M-1, N-1), \\
+\text{edit\_distance}(T, T', M, N-1), \\
+\text{edit\_distance}(T, T', M-1, N)
+\end{cases} & \text{se os nós não correspondem}
+\end{cases}
+\]
+
+\subsubsection{Casos Base para a Correção de Árvores}
+
+\begin{itemize}
+    \item Quando \( T \) se torna vazio, ou seja, \( M = 0 \), retornamos \( N \), pois são necessários \( N \) nós para converter uma árvore vazia em \( T' \).
+    \item Quando \( T' \) se torna vazio, ou seja, \( N = 0 \), retornamos \( M \), pois são necessários \( M \) nós para converter uma árvore vazia em \( T \).
+\end{itemize}
+
+\subsubsection{Passo a Passo do Algoritmo de Tai}
+
+
+
+\begin{enumerate}
+    \item \textbf{Calcular \( E[s:u:i, t:v:j] \)}.
+    
+
+O primeiro passo do algoritmo é calcular \( E[s:u:i, t:v:j] \) para todas as combinações possíveis de \( s, u, t, v, j \). Essa etapa envolve determinar o custo mínimo para transformar a subárvore de \( T \) enraizada 
+
+\begin{algorithm}[H]
+\caption{Algoritmo para Calcular \( E[s:u:i, t:v:j] \)}
+\KwData{Definir \( f^n(x) = f(f^{n-1}(x)) \) para \( n \geq 1 \) e \( x > 1 \), onde \( f(x) \) é o pai do nó \( x \)}
+\KwResult{Algoritmo para o passo (1)}
+\For{$i = 1, 2, \ldots, |T|$}{
+    \For{$j = 1, 2, \ldots, |T'|$}{
+        \For{$u = f(i), f^2(i), \ldots, 1$}{
+            \For{$s = f(u), f^2(u), \ldots, 1$}{
+                \For{$v = f(j), f^2(j), \ldots, 1$}{
+                    \For{$t = f(v), f^2(v), \ldots, 1$}{
+                        \uIf{$s = u = i$ e $t = v = j$}{
+                            $E[s:u:i, t:v:j] = r(T[i] \rightarrow T'[j])$\;
+                        }
+                        \uElseIf{$s = u = i$ e $t < v = j$}{
+                            $E[s:u:i, t:v:j] = E[s:u:i, t:f(j):j-1] + r(A \rightarrow T'[j])$\;
+                        }
+                        \uElseIf{$s < u = i$ e $t = v = j$}{
+                            $E[s:u:i, t:v:j] = E[s:f(i):i-1, t:v:j] + r(T[i] \rightarrow A)$\;
+                        }
+                        \Else{
+                            E[s:u:i, t:v:j] =\min \begin{cases}
+E[s:x:i, t:v:j] \\
+E[s:u:i, t:y:j] \\
+E[s:u:x-1, t:v:y-1] + E[x:x:i, y:y:j]
+\end{cases}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+(T[x] é o filho de T[u] no caminho de T[u] a T[i], e T'[y] é o filho de T'[v] no caminho de T[v] a T'[j])
+\end{algorithm}
+Neste algoritmo:
+\begin{itemize}
+    \item Examina-se todos os nós \(i\) na árvore \(T\) e todos os nós \(j\) na árvore \(T'\).
+    \item Para cada nó \(i\) na árvore \(T\), olha-se todos os ``pais" e ``avós" \(u\) desse nó.
+    \item Para cada  ``pai" e ``avô" \(u\), olha-se todos os ``bisavôs" \(s\).
+    \item Para cada nó \(j\) na árvore \(T'\), olha-se todos os ``pais" e ``avós" \(v\) desse nó.
+    \item Para cada ``pai" e ``avô" \(v\), olha-se todos os ``bisavôs" \(t\).
+    
+\end{itemize}
+
+
+As condições de transformação são verificadas e os custos mínimos são atualizados de acordo. Este cálculo determina o custo mínimo de transformar uma subárvore de \(T\) em uma subárvore correspondente de \(T'\).\\
+
+    \item \textbf{Calcular \( \text{MIN\_\_M}(i, j) \)} para todos \( i, j \), onde \( 1 \leq i \leq |T| \) e \( 1 \leq j \leq |T'| \).
+
+\begin{algorithm}[H]
+    \caption{Algoritmo para Calcular \( \text{MIN\_\_M}(i, j) \)}
+    MIN\_\_M($1, 1$) $= 0$ \\
+    \For{$i = 2, 3, \ldots, |T|$}{
+        \For{$j = 2, 3, \ldots, |T'|$}{
+            MIN\_\_M($i, j$) $\leftarrow$ INFINITE\\
+            \For{$s = f(i), f^2(i), \ldots, 1$}{
+                \For{$t = f(j), f^2(j), \ldots, 1$}{
+                    temp $\leftarrow$ MIN\_\_M($s, t$) + $E[s:f(i):i-1, t:f(j):j-1] - r(T[s] \rightarrow T'[t])$\\
+                    MIN\_\_M($i, j$) $\leftarrow$ \min(temp, MIN\_\_M($i, j$))
+                }
+            }
+            MIN\_\_M(i, j) $\leftarrow$ MIN\_\_M(i, j) + r(T[i] \rightarrow T'[j])\;
+        }
+    }
+\end{algorithm}
+
+Neste algoritmo:
+\begin{itemize}
+    \item Examina-se todos os pares de nós \(i\) na árvore \(T\) e \(j\) na árvore \(T'\).
+    \item Inicializa-se a transformação de \(1,1\) como zero.
+    \item Para cada nó \(i\) na árvore \(T\):
+    \item Para cada nó \(j\) na árvore \(T'\):
+    \item Define-se \( \text{MIN\_\_M}(i, j) \) como infinito no início.
+    \item Para cada ``pai" e ``avô" \(s\) do nó \(i\):
+    \item Para cada ``pai" e ``avô" \(t\) do nó \(j\):
+        \begin{itemize}
+            \item Calcula-se um valor temporário com base nas transformações anteriores.
+            \item Atualiza-se \( \text{MIN\_\_M}(i, j) \) com o menor valor encontrado.
+        \end{itemize}
+    \item Adiciona-se o custo de transformar \( T[i] \) em \( T'[j] \) a \( \text{MIN\_\_M}(i, j) \).\\
+\end{itemize}
+
+    \item \textbf{Calcular \( D(i, j) \)} para todos \( i, j \), onde \( 1 \leq i \leq |T| \) e \( 1 \leq j \leq |T'| \).
+
+\begin{algorithm}[H]
+\caption{Algoritmo para Calcular \( D(i, j) \)}
+\SetKwFunction{D}{D}
+$D(1, 1) \leftarrow 0$\\
+\For{$i = 2, 3, \ldots, |T|$}{
+    $D(i, 1) \leftarrow D(i-1, 1) + r(T[i] \rightarrow A)$\;
+}
+\For{$j = 2, 3, \ldots, |T'|$}{
+    $D(1, j) \leftarrow D(1, j-1) + r(A \rightarrow T'[j])$\;
+}
+\For{$i = 2, 3, \ldots, |T|$}{
+    \For{$j = 2, 3, \ldots, |T'|$}{
+        $D(i, j) \leftarrow \min \begin{cases}
+    D(i, j-1) + r(A \rightarrow T'[j]), \\
+    D(i-1, j) + r(T[i] \rightarrow A), \\
+    \text{MIN\_\_M}(i, j)
+\end{cases}$
+    }
+}
+
+\end{algorithm}
+
+Nesse algorítimo : 
+\begin{itemize}
+    \item Para cada nó \(j\) na árvore \(T'\):
+    \item Calcular \(D(i, j)\) considerando três possíveis opções
+    \item Adicionar o custo de transformar \(A\) (um nó vazio) no nó \(T'[j]\) ao custo de transformar a parte anterior da árvore \(T\) até o nó \(j-1\).
+    \item Adicionar o custo de transformar o nó \(T[i]\) em \(A\) ao custo de transformar a parte anterior da árvore \(T'\) até o nó \(i-1\).
+    \item Utilizar o menor número de mudanças calculado previamente (\( \text{MIN\_\_M}(i, j) \)).
+\end{itemize}
+
+
+\end{enumerate}
+
+\subsubsection{Complexidade de Tempo e Espaço}
+
+\paragraph{Complexidade de Tempo}
+
+A complexidade de tempo do algoritmo de Tai é polinomial. O algoritmo opera em \( O(V \cdot V' \cdot L^2 \cdot L'^2) \), onde \( V \) e \( V' \) são os números de nós em \( T \) e \( T' \), respectivamente, e \( L \) e \( L' \) são as profundidades máximas de \( T \) e \( T' \), respectivamente.
+
+\paragraph{Complexidade de Espaço}
+
+A complexidade de espaço do algoritmo é determinada pela profundidade da pilha de chamadas recursivas e pelo armazenamento necessário para manter os resultados intermediários. Portanto, a complexidade de espaço é: O(\max(V \cdot L, V' \cdot L'))
+
+No entanto, como o algoritmo utiliza estruturas de dados adicionais para armazenar os resultados intermediários, a complexidade espacial é polinomial em relação ao número de nós e à profundidade das árvores.
+
+
+\subsection{Algoritmo de Zhang-Shasha para Distância de Edição entre Árvores}
+
+O algoritmo de Zhang-Shasha para calcular a distância de edição entre duas árvores ordenadas e rotuladas é um método eficiente que utiliza programação dinâmica. Ele é projetado para responder a várias questões, como a distância entre duas árvores e a distância mínima quando subárvores podem ser removidas. O algoritmo consiste em três principais operações de edição: inserção, exclusão e modificação de nós.
+
+\subsubsection{Relações de Recorrência}
+
+As relações de recorrência para calcular a distância de edição entre subflorestas são definidas da seguinte forma:
+
+Parâmetros de entrada: 
+\begin{itemize}
+    \item \(T1[i_1..i]\): Subárvore da floresta 1.
+    \item \(T2[j_1..j]\): Subárvore da floresta 2.
+\end{itemize}
+
+\[
+\text{forestdist}() = \min \begin{cases}
+    \text{forestdist}(T1[l(i_1)..i-1], T2[j_1..j]) + \gamma(T1[i] \to \Lambda) \\
+    \text{forestdist}(T1[i_1..i], T2[l(j_1)..j-1]) + \gamma(\Lambda \to T2[j]) \\
+    \text{forestdist}(T1[l(i_1)..i-1], T2[l(j_1)..j-1]) + \gamma(T1[i] \to T2[j])
+\end{cases}
+\]
+
+Onde:
+- \( \gamma(T1[i] \to T2[j]) \) é o custo de editar o nó \( T1[i] \) para o nó \( T2[j] \).
+- \( \Lambda \) representa a operação de inserção ou exclusão de nós.
+
+A explicação dos casos acima é a seguinte:
+\begin{itemize}
+    \item 1. \( \text{forestdist}(T1[l(i_1)..i-1], T2[j_1..j]) + \gamma(T1[i] \to \Lambda) \): se \( T1[i] \) é excluído.
+    \item 2. \( \text{forestdist}(T1[i_1..i], T2[l(j_1)..j-1]) + \gamma(\Lambda \to T2[j]) \): se \( T2[j] \) é inserido.
+    \item 3. \( \text{forestdist}(T1[l(i_1)..i-1], T2[l(j_1)..j-1]) + \gamma(T1[i] \to T2[j]) \): se \( T1[i] \) é editado para \( T2[j] \).
+
+\end{itemize}
+\subsubsection{Casos base}
+
+Os casos base para a distância de edição são:
+
+\[
+\text{forestdist}(\Lambda, T2[j_1..j]) = \sum_{k=j_1}^{j} \gamma(\Lambda \to T2[k])
+\]
+
+\[
+\text{forestdist}(T1[i_1..i], \Lambda) = \sum_{k=i_1}^{i} \gamma(T1[k] \to \Lambda)
+\]
+
+A explicação dos casos base é a seguinte:
+- Quando a primeira subfloresta é vazia (\( \Lambda \)) e a segunda subfloresta é \( T2[j_1..j] \), a distância de edição é a soma dos custos de inserção de todos os nós da segunda subfloresta.
+- Quando a segunda subfloresta é vazia (\( \Lambda \)) e a primeira subfloresta é \( T1[i_1..i] \), a distância de edição é a soma dos custos de exclusão de todos os nós da primeira subfloresta.
+
+\subsubsection{Pseudo-código do Algoritmo}
+
+\begin{algorithm}[H]
+\caption{Algoritmo de Zhang-Shasha para Distância de Edição entre Árvores}
+\KwIn{Árvores $T1$, $T2$}
+\KwOut{Distância de edição entre $T1$ e $T2$}
+\SetAlgoLined
+\SetKwFunction{Forestdist}{forestdist}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\Forestdist{$T1, T2$}}{
+    \ForEach{$i$ \text{em ordem pós-ordem de} $T1$}{
+        \ForEach{$j$ \text{em ordem pós-ordem de} $T2$}{
+            \If{$T1[i]$ é folha}{
+                $D[i, 0] \gets i$\;
+            }
+            \If{$T2[j]$ é folha}{
+                $D[0, j] \gets j$\;
+            }
+            $D[i, j] \gets \min \begin{cases}
+    \text{Forestdist}(T1[l(i)..i-1], T2[j_1..j]) + \gamma(T1[i] \to \Lambda), \\
+    \text{Forestdist}(T1[i_1..i], T2[l(j_1)..j-1]) + \gamma(\Lambda \to T2[j]), \\
+    \text{Forestdist}(T1[l(i_1)..i-1], T2[l(j_1)..j-1]) + \gamma(T1[i] \to T2[j])
+\end{cases} $
+        }
+    }
+    \Return{$D[|T1|, |T2|]$}\;
+}
+\end{algorithm}
+
+\subsubsection{Explicação do Pseudo-código Passo a Passo}
+
+\begin{enumerate}
+    \item \textbf{Entrada e Saída}:
+    \begin{itemize}
+        \item \textbf{Entrada}: Duas árvores ordenadas $T1$ e $T2$.
+        \item \textbf{Saída}: A distância de edição entre as duas árvores, ou seja, o número mínimo de operações (inserção, exclusão, substituição) necessárias para transformar $T1$ em $T2$.
+    \end{itemize}
+    
+    \item \textbf{Função \Forestdist}:
+    \begin{itemize}
+        \item Define a função recursiva \Forestdist, que calcula a distância de edição entre subflorestas das árvores $T1$ e $T2$.
+    \end{itemize}
+    
+    \item \textbf{Iteração sobre as Subflorestas}:
+    \begin{itemize}
+        \item Para cada nó $i$ em $T1$ na ordem pós-ordem (processa-se as folhas antes dos nós raiz):
+        \item Para cada nó $j$ em $T2$ na ordem pós-ordem:
+        \begin{itemize}
+            \item Se $T1[i]$ é uma folha, então a distância de edição para transformar uma subfloresta de $T1$ contendo somente $i$ em uma árvore vazia é $i$ (i.e., todas as $i$ exclusões de nós de $T1$).
+            \item Se $T2[j]$ é uma folha, então a distância de edição para transformar uma árvore vazia em uma subfloresta de $T2$ contendo somente $j$ é $j$ (i.e., todas as $j$ inserções de nós de $T2$).
+        \end{itemize}
+    \end{itemize}
+    
+    \item \textbf{Cálculo da Distância de Edição}:
+    \begin{itemize}
+        \item Para nós internos, a distância de edição $D[i, j]$ é calculada como o mínimo de três casos:
+        \begin{enumerate}
+            \item Exclusão de $T1[i]$: $\Forestdist(T1[l(i)..i-1], T2[j_1..j]) + \gamma(T1[i] \to \Lambda)$
+            \item Inserção de $T2[j]$: $\Forestdist(T1[i_1..i], T2[l(j_1)..j-1]) + \gamma(\Lambda \to T2[j])$\\
+            \item Substituição de $T1[i]$ por $T2[j]$: $\Forestdist(T1[l(i_1)..i-1], T2[l(j_1)..j-1]) + \gamma(T1[i] \to T2[j])$\\
+        \end{enumerate}
+    \end{itemize}
+    \\
+    \item \textbf{Retorno do Resultado}:
+    \begin{itemize}
+        \item Retorna a distância de edição final $D[|T1|, |T2|]$, que é a distância de edição entre as árvores completas $T1$ e $T2$.
+    \end{itemize}
+\end{enumerate}
+
+
+
+\subsubsection{Complexidade de Tempo e Espaço}
+
+\paragraph{Complexidade de Tempo}
+A complexidade de tempo do algoritmo de Zhang-Shasha é \(O(|T1| \times |T2| \times \min(\text{depth}(T1), \text{leaves}(T1)) \times \min(\text{depth}(T2), \text{leaves}(T2)))\), onde \(|T1|\) e \(|T2|\) são o número de nós em \(T1\) e \(T2\), respectivamente. Isso se deve ao cálculo iterativo das distâncias para cada par de subflorestas.
+
+\paragraph{Complexidade de Espaço}
+A complexidade de espaço é \(O(|T1| \times |T2|)\), pois o algoritmo armazena as distâncias em uma matriz de tamanho proporcional ao produto dos tamanhos das duas árvores.
+
+
+\section{Implementação e Testes}
+Nesta seção, apresentamos três implementações distintas para o cálculo da distância de edição entre árvores, utilizando C++ como linguagem de programação. Sendo a primeira uma adaptação do primeiro código apresentado em \cite{geeksforgeeks2023edit}, a segunda é uma replicação do algorítimo apresentado no artigo de \cite{tai1979tree} e por fim, a última é baseado no artigo de \cite{zhang1989simple}.
+
+\subsection{Decisões de Implementação}
+
+Este estudo avalia a eficácia e a eficiência dos algoritmos de distância de edição entre árvores através de uma metodologia que envolve a geração de árvores a partir de strings aleatórias. A seguir, são descritas as etapas e decisões implementadas para os testes.
+
+\subsubsection{Geração de Strings Aleatórias}
+
+A geração de strings aleatórias constitui a primeira etapa do processo de teste. As strings são geradas com comprimentos pré-definidos variando de 200 a 2000 caracteres, com incrementos de 200 caracteres. O pseudocódigo para a geração dessas strings é apresentado abaixo:
+
+
+\begin{algorithm}[H]
+\caption{Geração de Strings Aleatórias}
+\KwIn{Tamanho $n$}
+\KwOut{String aleatória de tamanho $n$}
+\SetKwFunction{generateRandom}{generateRandom}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\generateRandom{$n$}}{
+    \ \ $resultado$ = null \\
+    $caracteres$ = "abcdefghijklmnopqrstuvwxyz" \\
+    \For{i=1 to $n$}{
+    $resultado$ += $caracteres$[gerarnumeroaleatorio(0, $n$($caracteres$)-1]
+    }
+    \Return{$resultado$}
+}
+\end{algorithm}
+
+
+\subsubsection{Transformação de String em Árvore}
+
+Após a geração, cada string é transformada em uma árvore. Cada caractere da string é convertido em um nó da árvore, com a raiz sendo o primeiro caractere e todos os caracteres subsequentes sendo filhos diretos da raiz, resultando em uma estrutura de árvore com profundidade 2. O pseudocódigo para esta transformação é fornecido a seguir:
+
+\begin{algorithm}[H]
+\caption{Transormação de String em Árvore}
+\KwIn{String $s$}
+\KwOut{$root$ de uma árvore gerada a partir de $s$}
+\SetKwFunction{stringToTree}{stringToTree}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\stringToTree({$s$})}{
+\If{$s$==null}{
+\Return{null}
+} 
+ $raiz$ = Novo TreeNode(s[0]) 
+   
+    \For{i=1 to $s$.tamanho}{
+    $root$.addFilho(novo TreeNode(s[i]))
+    }
+    \Return{$root$}
+}
+\end{algorithm}
+
+
+A escolha de transformar strings em árvores com profundidade 2 é motivada por vários fatores, principalmente relacionados ao controle da profundidade (L) da árvore e ao impacto desta profundidade no tempo de execução do algoritmo de Zhang-Shasha.
+
+\begin{itemize}
+    \item \textbf{Profundidade (L) e Tempo de Execução}:
+    \begin{itemize}
+        \item A profundidade de uma árvore (L) tem um impacto significativo no tempo de execução do algoritmo de Zhang-Shasha. O tempo de execução é diretamente proporcional à profundidade da árvore, além do número de nós e folhas. Transformando a árvore para ter uma profundidade fixa de 2, podemos isolar a influência de L e focar no número de nós.
+    \end{itemize}
+    
+    \item \textbf{Estrutura com Profundidade 2}:
+    \begin{itemize}
+        \item Transformando uma string em uma árvore onde a raiz tem todos os outros caracteres como filhos diretos, a profundidade da árvore é sempre 2. Isso simplifica a análise e permite uma comparação direta entre diferentes strings de comprimento variável sem o impacto da profundidade variável.
+    \end{itemize}
+    
+    \item \textbf{Ambiente Controlado}:
+    \begin{itemize}
+        \item Em um ambiente controlado, onde queremos minimizar a influência de variáveis externas e focar em aspectos específicos do algoritmo, a transformação para uma árvore com profundidade fixa garante que estamos lidando com uma estrutura previsível e uniforme. Isso é crucial para experimentos que visam isolar o efeito de um parâmetro específico, como o número de nós.
+    \end{itemize}
+    
+    \item \textbf{Facilidade de Implementação}:
+    \begin{itemize}
+        \item A implementação da transformação de strings em árvores com profundidade 2 é direta e evita a complexidade adicional que surgiria ao lidar com árvores com estruturas mais variadas e profundidades irregulares.
+    \end{itemize}
+\end{itemize}
+
+Portanto, a transformação de strings em árvores com profundidade 2 não só facilita a implementação e o entendimento do algoritmo, mas também permite um controle mais preciso sobre os parâmetros que influenciam o tempo de execução, proporcionando um ambiente de teste mais rigoroso e controlado.
+\newpage
+\subsection{Implementação dos algorítimos principais}
+
+Esta seção detalha as escolhas específicas dos três algoritmos de distância de edição entre árvores de nossa implementação: o método recursivo ingênuo, o algoritmo de Zhang-Shasha e o algoritmo de Tai.
+\subsubsection{Método Recursivo Ingênuo}
+
+O método recursivo ingênuo foi escolhido para fornecer uma linha de base para a eficiência dos algoritmos mais avançados. Apesar de sua ineficiência em casos de grandes entradas, sua simplicidade oferece uma clareza sobre o funcionamento básico das distâncias de edição entre árvores. O pseudocódigo para o método recursivo ingênuo é:
+
+
+
+\begin{algorithm}[H]
+\caption{Método Recursivo Ingênuo}
+\KwIn{Árvores $t1$ e $t2$}
+\KwOut{Distância de edição entre árvores}
+\SetKwFunction{editDistRec}{editDistRec}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\editDistRec{$t1$,$t2$}}{
+    \ \If{$t1$==null}{
+        \Return{tamanho $t2$}
+    }
+    \ \If{$t2$==null}{
+        \Return{tamanho $t1$}
+    }
+    \ \ $custo$ = ($t1$.rótulo == t2.rótulo) ? 0:1 \newline
+    \If{$t1$.filhos == null and $t2$.filhos ==null}{
+    \Return{$custo$}
+    }
+    \ \ $custoMin$ = \infty \newline
+    \ForEach{filho i de $t1$}{
+    \ \ \ForEach{filho j de $t2$}{
+    \ \ $custoAtual$ = \editDistRec{$t1$.filhos[i], $t2$.filhos[j]} \\
+     \ForEach{$t1$.filho != i}{$custoAtual$ += soma de \editDistRec{}}
+     \ \ \ForEach{$t2$.filho != j}{$custoAtual$ += soma de \editDistRec{}}
+     }
+     $custoMin$ = \min($custoMin$, $custoAtual$)
+    }
+    \Return{$custo + custoMin$}
+}
+\end{algorithm}
+\newpage
+\subsubsection{Algoritmo de Zhang-Shasha}
+
+O algoritmo de Zhang-Shasha foi implementado devido à sua abordagem otimizada utilizando programação dinâmica, que é mais eficaz para árvores de tamanho moderado.No contexto deste trabalho, deixamos explícito que, ao contrário de alguns algoritmos de distância de edição de árvores, a nossa abordagem não exige que a ordem das árvores seja pós-ordem, devido a jeito que a arovre foi estruturada , comentado anteriormente nesse artigo. Isso permite maior flexibilidade na aplicação do algoritmo, uma vez que não estamos restritos a uma ordem específica de processamento dos nós. Este algoritmo é particularmente adequado para aplicações onde a precisão é crítica. O pseudocódigo para o algoritmo de Zhang-Shasha é:
+
+
+
+\begin{algorithm}[H]
+\caption{Zhang-Shasha}
+\KwIn{Árvores $t1$ e $t2$}
+\KwOut{Distância de edição entre árvores}
+\SetKwFunction{editDistRec}{editDistRec}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\editDistRec{$t1$,$t2$}}{
+    \If{$t1$==null}{
+        \Return{$t2$.tamanho}
+    }
+    \If{$t2$==null}{
+        \Return{$t1$.tamanho}
+    }
+    inicializa $dp[t1.tamanho+1][t2.tamanho+1]$\newline
+    \For{i de 0 até $t1$.tamanho}{
+    $dp[i][0]=i$\newline
+    }
+     \For{j de 0 até $t2$.tamanho}{
+    $dp[0][j]=i$\newline
+    }
+    \For{i de 1 até $t1$.tamanho}{
+    \For{j de 1 até $t2$.tamanho}{
+    $custoSub =$ (filho i-1 de $t1$.rótulo == filho j-1 de $t2$.rótulo) ? 0:1 \newline
+    %%% antigo = dp$ [i] [j] = mínimo($dp$[i-1][j] + 1, $dp$ [i][j-1]+1, $dp$[i-1][j-1]+ $custoSub$
+    $dp[i][j] = \min \begin{cases}
+    dp[i-1][j] + 1, \\
+    dp[i][j-1] + 1, \\
+    dp[i-1][j-1] + \text{custoSub}
+\end{cases}$
+    }
+    }
+\Return{$dp$[m][n]+($t1$.rótulo == $t2$.rótulo) ? 0:1}
+}
+\end{algorithm}
+
+\subsubsection{Algoritmo de Tai}
+
+A implementação do algoritmo de Tai é utilizada por sua eficiência em comparar árvores com grandes disparidades em tamanho e estrutura. Este método também utiliza programação dinâmica para otimizar o cálculo da distância de edição. O pseudocódigo para o algoritmo de Tai é:
+
+\begin{algorithm}[H]
+\caption{Algoritmo de Tai}
+\KwIn{Árvores $t1$ e $t2$}
+\KwOut{Distância de edição entre árvores}
+\SetKwFunction{transformCost}{transformCost}
+\SetKwFunction{tai}{tai}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\transformCost{$a$,$b$}}{
+    \If{$a$==null and $b$ ==null}{
+    \Return{0}
+    }
+      \If{$a$==null}{
+    \Return{1}
+    }
+    \If{$b$==null}{
+    \Return{1}
+    }
+    \Return{
+    $a$.rótulo == $b$.rótulo ? 0 : 1 \newline
+    }
+}
+\Fn{\tai{$t1$, $t2$}}{
+\If{$t1$ == null or $t2$ == null}{
+\Return{0}
+}
+\ \ $m$ = número de filhos de $t1$\newline
+$n$ = número de filhos de $t2$\newline
+inicializa $dp$[$m$+1][$n$+1]\newline
+\For{i de 1 até $m$}{
+$dp$ [i][0]= $dp$[i-1][0] + \transformCost{filho i-1 de $t1$,null}
+}
+\For{i de 1 até $n$}{
+$dp$ [0][j]= $dp$[0][j-1] + \transformCost{null,filho j-1 de $t2$}
+}
+\For{i de 1 até $m$}{
+    \For{j de 1 até $n$}{
+        $dp[i][j] =\min \begin{cases}
+dp[i-1][j] + \text{transformCost}(\text{filho } i-1 \text{ de } t1, \text{null}), \\
+dp[i][j-1] + \text{transformCost}(\text{null}, \text{filho } j-1 \text{ de } t2), \\
+dp[i-1][j-1] + \text{tai}(\text{filho } i-1 \text{ de } t1, \text{filho } j-1 \text{ de } t2)
++ \text{custoSub}
+\end{cases}.$
+    }
+}
+
+\Return{$dp$[$m$][$n$]}
+}
+\end{algorithm}
+
+Cada algoritmo foi escolhido e implementado considerando-se a complexidade do problema e as características específicas das árvores a serem comparadas.
+
+\subsubsection{Teste dos Algoritmos - Main}
+
+Utilizando as árvores geradas, aplicam-se três algoritmos distintos de distância de edição: o método recursivo ingênuo, o algoritmo de Zhang-Shasha, e o algoritmo de Tai. Os testes são realizados usando pares de árvores geradas aleatoriamente. O tempo de execução de cada algoritmo é medido para avaliar a performance em diferentes tamanhos de entrada, sendo uma média do tempo de 10 execuções diferentes. A análise também inclui a avaliação da complexidade de espaço de cada método.
+
+A abordagem adotada permite uma comparação direta da performance dos algoritmos em condições controladas, com dados de entrada variados, fornecendo uma avaliação robusta da eficácia e eficiência dos métodos em cenários práticos de aplicação.
+
+
+\section{Discussão e Análise de Resultados}
+
+\subsection{Comparação da Complexidade Espacial dos Algoritmos}
+
+
+Neste trabalho, analisamos a complexidade espacial de três algoritmos principais para calcular a distância de edição entre árvores: o algoritmo recursivo ingênuo, o algoritmo de Tai e o algoritmo de Zhang-Shasha.
+
+A complexidade espacial do algoritmo recursivo ingênuo é \(O(\max(m, n))\), onde \(m\) e \(n\) são os números de nós nas árvores \(T1\) e \(T2\). Esta complexidade é linear em relação ao número máximo de nós em uma das árvores, uma vez que o algoritmo utiliza apenas um número constante de variáveis locais e não aloca espaço adicional além da pilha de chamadas recursivas. Por não utilizar memoization, o algoritmo recursivo ingênuo evita o armazenamento de resultados intermediários, o que resulta em uma eficiência espacial maior comparada aos outros algoritmos.
+
+Para o algoritmo de Tai, a complexidade espacial é \(O(\max(V \cdot L, V' \cdot L'))\), onde \(V\) e \(V'\) são os números de nós nas árvores \(T1\) e \(T2\), respectivamente, e \(L\) e \(L'\) são as profundidades máximas das árvores. Esta complexidade é determinada pela profundidade da pilha de chamadas recursivas e pelo armazenamento necessário para manter os resultados intermediários. O uso de memoization neste algoritmo melhora a eficiência temporal, mas aumenta a complexidade espacial devido ao espaço necessário para armazenar esses resultados intermediários.
+
+O algoritmo de Zhang-Shasha apresenta uma complexidade espacial de \(O(n \cdot m)\), onde \(n\) e \(m\) são os números de nós nas árvores \(T1\) e \(T2\). A complexidade espacial é determinada pela necessidade de armazenar as distâncias de edição em uma matriz de tamanho proporcional ao produto dos tamanhos das duas árvores. Este algoritmo também utiliza memoization para armazenar as distâncias de edição entre subárvores, o que, embora aumente a eficiência temporal, resulta em um uso maior de espaço.
+
+Em resumo, a comparação da complexidade espacial dos três algoritmos mostra que o algoritmo recursivo ingênuo é o mais eficiente em termos de espaço, pois não utiliza memoization e depende apenas da profundidade da pilha de chamadas. O algoritmo de Tai, embora eficiente em termos de tempo devido ao uso de memoization, requer um espaço significativo para armazenar os resultados intermediários. O algoritmo de Zhang-Shasha, por outro lado, oferece um equilíbrio entre eficiência temporal e espacial, tornando-se uma escolha preferida para a maioria das aplicações práticas.
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Algoritmo} & \textbf{Complexidade Espacial} \\ \hline
+Recursivo Ingênuo & \(O(\max(m, n))\) \\ \hline
+Tai & \(O(\max(V \cdot L, V' \cdot L'))\) \\ \hline
+Zhang-Shasha & \(O(n \cdot m)\) \\ \hline
+\end{tabular}
+\caption{Comparação da complexidade espacial dos algoritmos de distância de edição entre árvores}
+\label{tab:complexidade_espacial}
+\end{table}
+\newpage
+\subsection{Resultados Obtidos}
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|}
+\hline
+\textbf{Tamanho (caracteres)} & \textbf{Recursivo Ingênuo (ms)} & \textbf{Recursivo Ingênuo (s)} & \textbf{Zhang-Shasha (ms)} & \textbf{Zhang-Shasha (s)} & \textbf{Tai (ms)} & \textbf{Tai (s)} \\ \hline
+200  & 141 & 0 & 1 & 0 & 10 & 0 \\ \hline
+400  & 1178 & 1 & 6 & 0 & 40 & 0 \\ \hline
+600  & 5677 & 5 & 13 & 0 & 158 & 0 \\ \hline
+800  & 12612 & 12 & 22 & 0 & 233 & 0 \\ \hline
+1000 & 21629 & 21 & 33 & 0 & 324 & 0 \\ \hline
+1200 & 37591 & 37 & 41 & 0 & 472 & 0 \\ \hline
+1400 & 63086 & 63 & 50 & 0 & 652 & 0 \\ \hline
+1600 & 85623 & 85 & 76 & 0 & 858 & 0 \\ \hline
+1800 & 139436 & 139 & 105 & 0 & 1120 & 1 \\ \hline
+2000 & 213323 & 213 & 135 & 0 & 1590 & 1 \\ \hline
+\end{tabularx}
+\caption{Comparação dos tempos de execução dos algoritmos em milissegundos e segundos}
+\label{tab:resultados}
+\end{table}
+
+\subsubsection{Recursivo Ingênuo}
+
+O algoritmo Recursivo Ingênuo apresentou um crescimento exponencial no tempo de execução à medida que o tamanho das árvores aumentou. Observamos que para árvores com 200 caracteres, o tempo de execução foi de 141 ms, mas para árvores com 400 caracteres, esse tempo aumentou drasticamente para 1178 ms (1 s). Essa tendência de crescimento exponencial continua, chegando a 5677 ms (5 s) para árvores de 600 caracteres e 21629 ms (21 s) para árvores de 1000 caracteres. Finalmente, para árvores de 2000 caracteres, o tempo de execução atingiu 213323 ms (213 s).
+
+Este comportamento confirma a complexidade temporal \(O(3^n)\) do algoritmo Recursivo Ingênuo. Apesar de sua implementação simples e direta, o tempo de execução aumenta rapidamente, tornando-o impraticável para árvores de tamanho moderado a grande. Este fato limita significativamente sua aplicabilidade em cenários reais que envolvem grandes conjuntos de dados.
+
+\subsubsection{Zhang-Shasha}
+
+Em contraste, o algoritmo de Zhang-Shasha demonstrou um desempenho significativamente melhor. Para árvores com 200 caracteres, o tempo de execução foi de apenas 1 ms. Para árvores de 400 caracteres, o tempo aumentou ligeiramente para 6 ms, e continuou a crescer de forma controlada, atingindo 13 ms para 600 caracteres e 33 ms para 1000 caracteres. Mesmo para árvores de 2000 caracteres, o tempo de execução permaneceu relativamente baixo, em 135 ms.
+
+Com uma complexidade \(O(\min(n_{height}, n_{leaves}) \times \min(m_{height}, m_{leaves}) \times nm)\), o algoritmo de Zhang-Shasha é altamente eficiente para grandes tamanhos de árvore. Esta eficiência é evidenciada pelo crescimento linear no tempo de execução conforme o tamanho das árvores aumenta. A diferença de desempenho em comparação com o algoritmo Recursivo Ingênuo torna Zhang-Shasha uma escolha preferida para aplicações práticas que exigem a comparação de grandes estruturas de árvore.
+
+\subsubsection{Tai}
+
+O algoritmo de Tai também apresentou um desempenho bastante eficiente, embora geralmente um pouco menos eficiente que o algoritmo de Zhang-Shasha. Para árvores com 200 caracteres, o tempo de execução foi de 10 ms, aumentando para 40 ms para árvores de 400 caracteres. Para árvores de 600 caracteres, o tempo foi de 158 ms, e para árvores de 1000 caracteres, 324 ms. Para árvores de 2000 caracteres, o tempo de execução foi de 1590 ms (1 s).
+
+Apesar de não ser tão rápido quanto o algoritmo de Zhang-Shasha, o algoritmo de Tai ainda oferece uma alternativa viável e eficiente ao Recursivo Ingênuo, com uma complexidade polinomial que permite um crescimento mais controlado no tempo de execução. Esta eficiência relativa torna o algoritmo de Tai uma opção prática para a comparação de árvores em diversas aplicações, especialmente quando a estrutura das árvores não é extremamente grande.
+
+\subsection{Análise de Resultados}
+
+Nesta seção, apresentamos uma análise detalhada dos resultados obtidos com os quatro gráficos gerados, que comparam o tempo de execução dos algoritmos de Distância de Edição de Árvores: Recursivo Ingênuo, Zhang-Shasha e Tai. Os gráficos estão organizados de forma a facilitar a visualização dos dados e a análise da complexidade dos algoritmos.
+
+\begin{multicols}{2}
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                title={Escala Linear},
+                xlabel={Tamanho das Árvores (número de caracteres)},
+                ylabel={Tempo de Execução (ms)},
+                legend style={font=\tiny, at={(0,1)}, anchor=north west},
+                grid=major,
+                width=\linewidth,
+                height=0.8\linewidth
+            ]
+            \addplot[color=black, mark=*] coordinates {
+                (200, 141) (400, 1178) (600, 5677) (800, 12612) (1000, 21629) (1200, 37591) (1400, 63086) (1600, 85623) (1800, 139436) (2000, 213323)
+            };
+            \addplot[color=green, mark=*] coordinates {
+                (200, 1) (400, 6) (600, 13) (800, 22) (1000, 33) (1200, 41) (1400, 50) (1600, 76) (1800, 105) (2000, 135)
+            };
+            \addplot[color=red, mark=*] coordinates {
+                (200, 10) (400, 40) (600, 158) (800, 233) (1000, 324) (1200, 472) (1400, 652) (1600, 858) (1800, 1120) (2000, 1590)
+            };
+            \legend{Recursivo Ingênuo, Zhang-Shasha, Tai}
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Comparação do Tempo de Execução (Escala Linear)}
+        \label{fig01}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                title={Escala Logarítmica},
+                xlabel={Tamanho das Árvores (número de caracteres)},
+                ylabel={Tempo de Execução (ms)},
+                ymode=log,
+                legend style={font=\tiny, at={(0,1)}, anchor=north west},
+                grid=major,
+                width=\linewidth,
+                height=0.8\linewidth
+            ]
+            \addplot[color=black, mark=*] coordinates {
+                (200, 141) (400, 1178) (600, 5677) (800, 12612) (1000, 21629) (1200, 37591) (1400, 63086) (1600, 85623) (1800, 139436) (2000, 213323)
+            };
+            \addplot[color=green, mark=*] coordinates {
+                (200, 1) (400, 6) (600, 13) (800, 22) (1000, 33) (1200, 41) (1400, 50) (1600, 76) (1800, 105) (2000, 135)
+            };
+            \addplot[color=red, mark=*] coordinates {
+                (200, 10) (400, 40) (600, 158) (800, 233) (1000, 324) (1200, 472) (1400, 652) (1600, 858) (1800, 1120) (2000, 1590)
+            };
+            \legend{Recursivo Ingênuo, Zhang-Shasha, Tai}
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Comparação do Tempo de Execução (Escala Logarítmica)}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                title={Escala Linear},
+                xlabel={Tamanho das Árvores (número de caracteres)},
+                ylabel={Tempo de Execução (ms)},
+                legend style={font=\tiny, at={(0,1)}, anchor=north west},
+                grid=major,
+                width=\linewidth,
+                height=0.8\linewidth
+            ]
+            \addplot[color=green, mark=*] coordinates {
+                (200, 1) (400, 6) (600, 13) (800, 22) (1000, 33) (1200, 41) (1400, 50) (1600, 76) (1800, 105) (2000, 135)
+            };
+            \addplot[color=red, mark=*] coordinates {
+                (200, 10) (400, 40) (600, 158) (800, 233) (1000, 324) (1200, 472) (1400, 652) (1600, 858) (1800, 1120) (2000, 1590)
+            };
+            \legend{Zhang-Shasha, Tai}
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Comparação entre Zhang-Shasha e Tai (Escala Linear)}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                title={Escala Logarítmica},
+                xlabel={Tamanho das Árvores (número de caracteres)},
+                ylabel={Tempo de Execução (ms)},
+                ymode=log,
+                legend style={font=\tiny, at={(0,1)}, anchor=north west},
+                grid=major,
+                width=\linewidth,
+                height=0.8\linewidth
+            ]
+            \addplot[color=green, mark=*] coordinates {
+                (200, 1) (400, 6) (600, 13) (800, 22) (1000, 33) (1200, 41) (1400, 50) (1600, 76) (1800, 105) (2000, 135)
+            };
+            \addplot[color=red, mark=*] coordinates {
+                (200, 10) (400, 40) (600, 158) (800, 233) (1000, 324) (1200, 472) (1400, 652) (1600, 858) (1800, 1120) (2000, 1590)
+            };
+            \legend{Zhang-Shasha, Tai}
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Comparação entre Zhang-Shasha e Tai (Escala Logarítmica)}
+    \end{figure}
+\end{multicols}
+\subsubsection{Comparação Geral dos Algoritmos}
+
+Observando a Figura 1, que mostra a comparação do tempo de execução dos algoritmos em escala linear, é evidente que o algoritmo Recursivo Ingênuo possui um crescimento exponencial no tempo de execução à medida que o tamanho das árvores aumenta. Este comportamento é esperado devido à sua complexidade computacional elevada, tornando-o impraticável para árvores grandes. Por outro lado, os algoritmos Zhang-Shasha e Tai demonstram um desempenho significativamente melhor, com tempos de execução muito menores.
+
+A Figura 2, em escala logarítmica, reforça esta observação. A escala logarítmica permite visualizar mais claramente as diferenças de crescimento entre os algoritmos. Novamente, vemos que o algoritmo Recursivo Ingênuo cresce muito mais rapidamente em comparação aos outros dois. O algoritmo de Tai apresenta um crescimento mais moderado, enquanto o algoritmo de Zhang-Shasha mantém-se com um desempenho ainda melhor, evidenciando sua eficiência superior.
+
+\subsubsection{Comparação entre Zhang-Shasha e Tai}
+
+Para uma análise mais detalhada entre os algoritmos Zhang-Shasha e Tai, as Figuras 3 e 4 mostram comparações em escalas linear e logarítmica, respectivamente. Em ambas as figuras, fica claro que o algoritmo de Zhang-Shasha é consistentemente mais eficiente do que o de Tai.
+
+A Figura 3, em escala linear, destaca que, embora ambos os algoritmos sejam eficientes, o tempo de execução do algoritmo de Zhang-Shasha é ligeiramente menor para todos os tamanhos de árvores testados. Já na Figura 4, em escala logarítmica, essa diferença torna-se mais evidente, confirmando que o algoritmo de Zhang-Shasha mantém uma vantagem consistente em termos de tempo de execução.
+
+Este desempenho superior do algoritmo de Zhang-Shasha pode ser atribuído à sua complexidade 
+\(O(\min\{n_{height}, n_{leaves}\} \times \min\{m_{height}, m_{leaves}\} \times nm)\), 
+que é mais eficiente em cenários práticos, especialmente quando \(L\) é pequeno, sendo a profundidade da árvore. Nesse trabalho , devida a decisão de implementação da função \texttt{stringToTree}  \(L\) sempre será igual a 2, a eficiência do algoritmo de Zhang-Shasha é ainda mais pronunciada, permitindo um processamento mais rápido e eficaz em comparação com o algoritmo de Tai, cuja complexidade é 
+\(O(V \cdot V' \cdot L^2 \cdot L'^2)\).
+
+A escolha de manter \(L\) igual a 2 foi uma decisão de implementação, relacionada à nossa função \texttt{stringToTree}. Esta função transforma uma string em uma árvore, onde cada caractere da string se torna um nó da árvore, e cada nó subsequente é adicionado como filho do nó anterior, resultando em uma estrutura de árvore linear. Esta estrutura simples e consistente permitiu que os testes fossem realizados em um cenário controlado, facilitando a comparação direta dos tempos de execução entre os diferentes algoritmos.
+
+\subsection{Teste de Stress}
+
+Testes de stress são cruciais para entender a viabilidade e a eficiência de algoritmos em aplicações práticas, especialmente em contextos onde o tempo de processamento é um fator crítico. Portanto, foram realizados três diferentes testes com os algoritmos de distância de edição de Zhang-Shasha e Tai, os quais foram observados um cenário de alto volume de dados isolado e juntamente com um cenário com largura máxima da árvore e um cenário com árvores adversárias quase idênticas.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Tamanho dos Dados} & \textbf{Tempo Zhang-Shasha (ms)} & \textbf{Tempo Tai (ms)} \\ \hline
+100.000                    & 44.033                          & 44.139                 \\ \hline
+200.000                    & 175.923                         & 175.534                \\ \hline
+300.000                    & 394.550                         & 393.712                \\ \hline
+\end{tabular}
+\caption{Tempos de cálculo para os algoritmos Zhang-Shasha e Tai no cenário de diferentes tamanhos de dados}
+\label{tab:tempos_calculo}
+\end{table}
+
+O comportamento ao aplicar o teste de stress nos cenários de largura máxima da árvore e alto volume de dados foram extremamente similares, no qual os resultados  indicam que ambos os algoritmos apresentam tempos de cálculo que crescem de forma aproximadamente linear com o aumento do tamanho dos dados, o que é esperado dada a complexidade algorítmica. No entanto, observa-se uma pequena variação no desempenho entre os dois algoritmos, que pode ser atribuída a diferenças sutis nas implementações ou nas estruturas de dados utilizadas. 
+
+Já ao aplicar o cenário de árvores adversárias quase idênticas, foi desenvolvido pares de árvores que são estruturalmente e semanticamente quase iguais, contendo somente uma diferença. Dessa forma, o resultado indica que ambos os algoritmos, na medida em que é aumentado o volume dos dados, possuem um comportamento esperado e eficiente de modo que, mesmo para árvores com muitos nós, o tempo de execução ainda foi menor do que comparado ao cenário isolado do aumento de volume de dados. Assim, a escalabilidade desses algoritmos em condições de stress sugere que eles são robustos, mas podem requerer otimizações adicionais ou uso de técnicas paralelas para lidar com volumes de dados ainda maiores.
+
+\subsection{Conclusão da Análise}
+
+Em resumo, a análise dos gráficos permite concluir que o algoritmo Recursivo Ingênuo, apesar de conceitualmente simples, é altamente ineficiente para árvores de grande porte devido ao seu crescimento exponencial no tempo de execução. O algoritmo de Zhang-Shasha oferece uma melhoria significativa e se destaca como o mais eficiente entre os três, apresentando os melhores tempos de execução em todos os cenários analisados. O algoritmo de Tai também é eficiente, mas é superado pelo de Zhang-Shasha, especialmente em implementações onde \(L\) é pequeno.
+
+Os testes de stress realizados até 300.000 vértices revelam que ambos os algoritmos Zhang-Shasha e Tai mantêm um desempenho consistente sob condições extremas, com tempos de processamento que crescem de maneira controlada conforme o aumento do tamanho dos dados. Este resultado é fundamental para aplicações que demandam a manipulação de grandes volumes de dados, sugerindo que, apesar das eficiências observadas, podem ser necessárias otimizações adicionais ou a adoção de técnicas computacionais mais avançadas para garantir a escalabilidade em contextos ainda mais exigentes.
+
+Esta análise reforça a importância de utilizar algoritmos eficientes para problemas de edição de árvores, especialmente em aplicações que lidam com grandes volumes de dados.
+
+
+
+\section{Trabalhos Futuros}
+
+A análise e os testes de stress realizados neste trabalho destacam várias direções promissoras para pesquisas futuras:
+
+\begin{itemize}
+    \item \textbf{Otimização dos Algoritmos:} Apesar da eficiência demonstrada pelos algoritmos de Zhang-Shasha e Tai, há espaço para melhorias. Estudos futuros podem explorar técnicas de otimização, como paralelização e o uso de estruturas de dados avançadas, para reduzir ainda mais os tempos de processamento, especialmente em grandes volumes de dados.
+    
+    \item \textbf{Implementação em Ambientes Distribuídos:} A implementação dos algoritmos em ambientes distribuídos pode ajudar a lidar com conjuntos de dados extremamente grandes. Investigar como a distribuição de tarefas pode melhorar a eficiência e a escalabilidade dos algoritmos é uma área relevante de pesquisa.
+    
+    
+    \item \textbf{Comparação com Outros Algoritmos:} Embora o foco deste trabalho tenha sido nos algoritmos de Zhang-Shasha e Tai, existem outros algoritmos de edição de árvores que podem ser comparados. Avaliar o desempenho desses algoritmos em cenários semelhantes pode ajudar a identificar casos de uso específicos onde outros métodos podem ser mais eficientes.
+    
+    \item \textbf{Aplicações Práticas:} Explorar aplicações práticas dos algoritmos em diferentes domínios, como bioinformática, linguística computacional e análise de dados hierárquicos, pode demonstrar a utilidade e versatilidade dos métodos de edição de árvores em situações do mundo real.
+    
+    \item \textbf{Avaliação de Robustez:} Testar a robustez dos algoritmos frente a dados ruidosos e incompletos pode ser útil para garantir sua aplicabilidade em cenários menos controlados. Desenvolver técnicas para lidar com tais dados sem comprometer significativamente a eficiência é uma área de interesse.
+\end{itemize}
+
+Essas direções de pesquisa não apenas ampliam o conhecimento teórico sobre algoritmos de edição de árvores, mas também visam a aplicação prática em contextos que demandam alta eficiência e escalabilidade. A evolução contínua desses algoritmos pode ter um impacto significativo em diversas áreas que dependem da comparação e análise de estruturas de dados complexas.
+
+
+\section{Conclusão}
+Neste trabalho, exploramos a métrica de distância de edição entre árvores, implementando e comparando três algoritmos principais: o recursivo ingênuo, Tai e Zhang-Shasha. Nossos experimentos demonstraram que, embora o algoritmo recursivo ingênuo seja simples, ele é inviável para grandes árvores devido à sua complexidade exponencial. Em contrapartida, os algoritmos de Tai e Zhang-Shasha se mostraram eficientes e escaláveis, com o algoritmo de Zhang-Shasha apresentando um desempenho superior na maioria dos casos. Concluímos que os algoritmos de Tai e Zhang-Shasha são mais adequados para aplicações práticas que requerem a comparação de grandes estruturas de árvore.
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}
