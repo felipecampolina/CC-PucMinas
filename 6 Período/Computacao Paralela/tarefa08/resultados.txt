@@ -1,0 +1,6 @@
+Open mp:3.152000 segundos
+CUDA:  0.250345 segundos
+  Warps = 232 warps
+Warp Execution Efficiency = 60.00%
+
+Sequencial : 23.500000 
